@@ -1,5 +1,14 @@
 <?xml version = '1.0' encoding = 'UTF-8'?>
 <jpr:project xmlns:jpr="http://xmlns.oracle.com/ide/project">
+   <value n="BPELProcess1_Namespace" v="http://xmlns.oracle.com/Marqtplaats/ParticipantService/BPELProcess1"/>
+   <value n="BPELProcess1_ProcessName" v="BPELProcess1"/>
+   <value n="BPELProcess1_Template" v="BPEL_BASE_ON_WSDL"/>
+   <value n="BPELProcess1_wsdl" v="participantUpsertService.wsdl"/>
+   <url n="BPELUpserter_bpelFileURL" path="BPELUpserter.bpel"/>
+   <value n="BPELUpserter_Namespace" v="http://xmlns.oracle.com/Marqtplaats/ParticipantService/BPELUpserter"/>
+   <value n="BPELUpserter_ProcessName" v="BPELUpserter"/>
+   <value n="BPELUpserter_Template" v="BPEL_SYNC_PROCESS"/>
+   <value n="BPELUpserter_wsdl" v="BPELUpserter.wsdl"/>
    <hash n="component-versions">
       <value n="oracle.adfdt.controller.adfc.source.migration.AdfControllerSchemaMigrator" v="11.1.1.1.0"/>
       <value n="oracle.adfdt.controller.common.migrator.ProjectMigrator" v="11.1.1.1.0"/>
@@ -60,7 +69,7 @@
       <string v="oracle.tip.tools.ide.fabric.addin.SCAContentSetProvider/sca-content"/>
    </list>
    <value n="defaultPackage" v="participantservice"/>
-   <value n="Namespace" v="http://xmlns.oracle.com/Marqtplaats/ParticipantService/ValidateEmailBPEL"/>
+   <value n="Namespace" v="http://xmlns.oracle.com/Marqtplaats/ParticipantService/BPELUpserter"/>
    <hash n="oracle.ide.model.ResourcePaths">
       <hash n="resourcesContentSet">
          <list n="url-path"/>
@@ -353,8 +362,8 @@
          </list>
       </hash>
    </hash>
-   <value n="ProcessName" v="ValidateEmailBPEL"/>
-   <value n="Template" v="BPEL_ONE_WAY_PROCESS"/>
+   <value n="ProcessName" v="BPELUpserter"/>
+   <value n="Template" v="BPEL_SYNC_PROCESS"/>
    <url n="ValidateEmailBPEL_bpelFileURL" path="ValidateEmailBPEL.bpel"/>
    <value n="ValidateEmailBPEL_Namespace" v="http://xmlns.oracle.com/Marqtplaats/ParticipantService/ValidateEmailBPEL"/>
    <value n="ValidateEmailBPEL_ProcessName" v="ValidateEmailBPEL"/>

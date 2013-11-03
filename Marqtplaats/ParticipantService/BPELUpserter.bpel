@@ -1,0 +1,125 @@
+<?xml version = "1.0" encoding = "UTF-8" ?>
+<!--
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  Oracle JDeveloper BPEL Designer 
+  
+  Created: Sun Nov 03 23:40:53 CET 2013
+  Author:  mnuman
+  Type: BPEL 2.0 Process
+  Purpose: Synchronous BPEL Process
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-->
+<process name="BPELUpserter"
+               targetNamespace="http://xmlns.oracle.com/Marqtplaats/ParticipantService/BPELUpserter"
+               xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable"
+               xmlns:client="http://xmlns.oracle.com/Marqtplaats/ParticipantService/BPELUpserter"
+               xmlns:ora="http://schemas.oracle.com/xpath/extension"
+               xmlns:bpelx="http://schemas.oracle.com/bpel/extension"
+         xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable"
+         xmlns:ns1="urn:medParticipants"
+         xmlns:ns2="http://xmlns.qualogy.com/marQtplaats"
+         xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+         xmlns:xp20="http://www.oracle.com/XSL/Transform/java/oracle.tip.pc.services.functions.Xpath20"
+         xmlns:bpws="http://schemas.xmlsoap.org/ws/2003/03/business-process/"
+         xmlns:oraext="http://www.oracle.com/XSL/Transform/java/oracle.tip.pc.services.functions.ExtFunc"
+         xmlns:dvm="http://www.oracle.com/XSL/Transform/java/oracle.tip.dvm.LookupValue"
+         xmlns:hwf="http://xmlns.oracle.com/bpel/workflow/xpath"
+         xmlns:ids="http://xmlns.oracle.com/bpel/services/IdentityService/xpath"
+         xmlns:bpm="http://xmlns.oracle.com/bpmn20/extensions"
+         xmlns:xdk="http://schemas.oracle.com/bpel/extension/xpath/function/xdk"
+         xmlns:xref="http://www.oracle.com/XSL/Transform/java/oracle.tip.xref.xpath.XRefXPathFunctions"
+         xmlns:ldap="http://schemas.oracle.com/xpath/extension/ldap"
+         xmlns:ns3="http://xmlns.oracle.com/Marqtplaats/ParticipantService/ValidateEmailBPEL">
+
+    <import namespace="http://xmlns.oracle.com/Marqtplaats/ParticipantService/BPELUpserter" location="BPELUpserter.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
+    <!-- 
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        PARTNERLINKS                                                      
+        List of services participating in this BPEL process               
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    --> 
+  <partnerLinks>
+    <!-- 
+      The 'client' role represents the requester of this service. It is 
+      used for callback. The location and correlation information associated
+      with the client role are automatically set using WS-Addressing.
+    -->
+    <partnerLink name="bpelupserter_client" partnerLinkType="client:BPELUpserter" myRole="BPELUpserterProvider"/>
+    <partnerLink name="medParticipants.medParticipants"
+                 partnerLinkType="ns1:medParticipants.medParticipants"
+                 partnerRole="ParticipantsPort"/>
+    <partnerLink name="medEmailValidator.medEmailValidator"
+                 partnerLinkType="ns3:ValidateEmailBPEL"
+                 partnerRole="ValidateEmailBPELProvider"/>
+  </partnerLinks>
+
+  <!-- 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      VARIABLES                                                        
+      List of messages and XML documents used within this BPEL process 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  -->
+  <variables>
+    <!-- Reference to the message passed as input during initiation -->
+    <variable name="inputVariable" messageType="client:BPELUpserterRequestMessage"/>
+
+    <!-- Reference to the message that will be returned to the requester-->
+    <variable name="outputVariable" messageType="client:BPELUpserterResponseMessage"/>
+    <variable name="ivkUpserterInput" messageType="ns1:ParticipantMessage"/>
+    <variable name="ivkUpserterOutput" messageType="ns1:StatusMessage"/>
+    <variable name="uuid" type="xsd:string"/>
+    <variable name="ivkStartValidationInputVariable"
+              messageType="ns3:ValidateEmailBPELRequestMessage"/>
+  </variables>
+
+  <!-- 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     ORCHESTRATION LOGIC                                               
+     Set of activities coordinating the flow of messages across the    
+     services integrated within this business process                  
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  -->
+  <sequence name="main">
+
+    <!-- Receive input from requestor. (Note: This maps to operation defined in BPELUpserter.wsdl) -->
+    <receive name="receiveInput" partnerLink="bpelupserter_client" portType="client:BPELUpserter" operation="process" variable="inputVariable" createInstance="yes"/>
+    <assign name="assign">
+      <copy>
+        <from>$inputVariable.payload</from>
+        <to>$ivkUpserterInput.payload</to>
+      </copy>
+    </assign>
+    <invoke name="invokeUpserter"
+            partnerLink="medParticipants.medParticipants"
+            portType="ns1:ParticipantsPort" operation="insert"
+            inputVariable="ivkUpserterInput"
+            outputVariable="ivkUpserterOutput" bpelx:invokeAsDetail="no"/>
+    <assign name="assignOutputStatus">
+      <copy>
+        <from>$ivkUpserterOutput.payload</from>
+        <to>$outputVariable.payload</to>
+      </copy>
+      <copy>
+        <from>ora:generateGUID()</from>
+        <to>$uuid</to>
+      </copy>
+    </assign>
+    <!-- Generate reply to synchronous request -->
+    <reply name="replyOutput" partnerLink="bpelupserter_client" portType="client:BPELUpserter" operation="process" variable="outputVariable"/>
+    <assign name="assignStartValidationStuff">
+      <copy>
+        <from>$inputVariable.payload/ns2:NickName</from>
+        <to>$ivkStartValidationInputVariable.payload/ns2:NickName</to>
+      </copy>
+      <copy>
+        <from>$uuid</from>
+        <to>$ivkStartValidationInputVariable.payload/ns2:UUID</to>
+      </copy>
+    </assign>
+    <invoke name="ivkStartValidation"
+            partnerLink="medEmailValidator.medEmailValidator"
+            portType="ns3:ValidateEmailBPEL" operation="process"
+            inputVariable="ivkStartValidationInputVariable"
+            bpelx:invokeAsDetail="no"/>
+  </sequence>
+</process>

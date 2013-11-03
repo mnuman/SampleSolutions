@@ -19,11 +19,10 @@
           location="ValidateEmailBPEL.wsdl" importType="wsdl"/>
   <import namespace="http://xmlns.oracle.com/pcbpel/adapter/http/Marqtplaats/ParticipantService/httpCompleter"
           location="httpCompleter.wsdl" importType="wsdl"/>
-  <service name="medParticipants_ep"
-           ui:wsdlLocation="oramds:/apps/wsdl/abstractParticipants.wsdl">
-    <interface.wsdl interface="urn:medParticipants#wsdl.interface(ParticipantsPort)"/>
-    <binding.ws port="urn:medParticipants#wsdl.endpoint(medParticipants_ep/ParticipantsPort_pt)"/>
-  </service>
+  <import namespace="http://xmlns.oracle.com/Marqtplaats/ParticipantService/BPELUpserter"
+          location="BPELUpserter.wsdl" importType="wsdl"/>
+  <import namespace="urn:medParticipants"
+          location="abstractParticipantsWrapper.wsdl" importType="wsdl"/>
   <service name="medEmailValidator_ep" ui:wsdlLocation="ValidateEmailBPEL.wsdl">
     <interface.wsdl interface="http://xmlns.oracle.com/Marqtplaats/ParticipantService/ValidateEmailBPEL#wsdl.interface(ValidateEmailBPEL)"/>
     <binding.ws port="http://xmlns.oracle.com/Marqtplaats/ParticipantService/ValidateEmailBPEL#wsdl.endpoint(medEmailValidator_ep/ValidateEmailBPEL_pt)"/>
@@ -35,6 +34,10 @@
       <property name="http.verb" type="xs:string" many="false">GET</property>
       <property name="http.payload" type="xs:string" many="false">url-encoded</property>
     </binding.ws>
+  </service>
+  <service name="bpelupserter_client_ep" ui:wsdlLocation="BPELUpserter.wsdl">
+    <interface.wsdl interface="http://xmlns.oracle.com/Marqtplaats/ParticipantService/BPELUpserter#wsdl.interface(BPELUpserter)"/>
+    <binding.ws port="http://xmlns.oracle.com/Marqtplaats/ParticipantService/BPELUpserter#wsdl.endpoint(bpelupserter_client_ep/BPELUpserter_pt)"/>
   </service>
   <component name="medParticipants">
     <implementation.mediator src="medParticipants.mplan"/>
@@ -52,6 +55,10 @@
   <component name="mediateHttpCompleter">
     <implementation.mediator src="mediateHttpCompleter.mplan"/>
   </component>
+  <component name="BPELUpserter" version="2.0">
+    <implementation.bpel src="BPELUpserter.bpel"/>
+    <property name="bpel.config.transaction" type="xs:string" many="false">required</property>
+  </component>
   <reference name="participantUpsertService"
              ui:wsdlLocation="participantUpsertService.wsdl">
     <interface.wsdl interface="http://xmlns.oracle.com/pcbpel/adapter/db/Marqtplaats/ParticipantService/participantUpsertService#wsdl.interface(participantUpsertService_ptt)"/>
@@ -64,10 +71,6 @@
     <property name="jca.retry.maxInterval" type="xs:string" many="false"
               override="may">120</property>
   </reference>
-  <wire>
-    <source.uri>medParticipants_ep</source.uri>
-    <target.uri>medParticipants/medParticipants</target.uri>
-  </wire>
   <wire>
     <source.uri>medParticipants/participantUpsertService</source.uri>
     <target.uri>participantUpsertService</target.uri>
@@ -86,6 +89,18 @@
   </wire>
   <wire>
     <source.uri>mediateHttpCompleter/medEmailValidator.medEmailValidator</source.uri>
+    <target.uri>medEmailValidator/medEmailValidator</target.uri>
+  </wire>
+  <wire>
+    <source.uri>bpelupserter_client_ep</source.uri>
+    <target.uri>BPELUpserter/bpelupserter_client</target.uri>
+  </wire>
+  <wire>
+    <source.uri>BPELUpserter/medParticipants.medParticipants</source.uri>
+    <target.uri>medParticipants/medParticipants</target.uri>
+  </wire>
+  <wire>
+    <source.uri>BPELUpserter/medEmailValidator.medEmailValidator</source.uri>
     <target.uri>medEmailValidator/medEmailValidator</target.uri>
   </wire>
 </composite>
