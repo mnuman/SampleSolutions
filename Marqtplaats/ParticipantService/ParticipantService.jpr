@@ -1,5 +1,9 @@
 <?xml version = '1.0' encoding = 'UTF-8'?>
 <jpr:project xmlns:jpr="http://xmlns.oracle.com/ide/project">
+   <value n="BPELProcess1_Namespace" v="http://xmlns.oracle.com/Marqtplaats/ParticipantService/BPELProcess1"/>
+   <value n="BPELProcess1_ProcessName" v="BPELProcess1"/>
+   <value n="BPELProcess1_Template" v="BPEL_BASE_ON_WSDL"/>
+   <value n="BPELProcess1_wsdl" v="oramds:/apps/wsdl/abstractValidationService.wsdl"/>
    <hash n="component-versions">
       <value n="oracle.adfdt.controller.adfc.source.migration.AdfControllerSchemaMigrator" v="11.1.1.1.0"/>
       <value n="oracle.adfdt.controller.common.migrator.ProjectMigrator" v="11.1.1.1.0"/>
@@ -65,7 +69,7 @@
    <value n="EmailValidationBPEL_ProcessName" v="EmailValidationBPEL"/>
    <value n="EmailValidationBPEL_Template" v="BPEL_ONE_WAY_PROCESS"/>
    <value n="EmailValidationBPEL_wsdl" v="EmailValidationBPEL.wsdl"/>
-   <value n="Namespace" v="http://xmlns.oracle.com/Marqtplaats/ParticipantService/EmailValidationBPEL"/>
+   <value n="Namespace" v="http://xmlns.oracle.com/Marqtplaats/ParticipantService/ValidationBPEL"/>
    <hash n="oracle.ide.model.ResourcePaths">
       <hash n="resourcesContentSet">
          <list n="url-path"/>
@@ -358,6 +362,11 @@
          </list>
       </hash>
    </hash>
-   <value n="ProcessName" v="EmailValidationBPEL"/>
-   <value n="Template" v="BPEL_ONE_WAY_PROCESS"/>
+   <value n="ProcessName" v="ValidationBPEL"/>
+   <value n="Template" v="BPEL_BASE_ON_WSDL"/>
+   <url n="ValidationBPEL_bpelFileURL" path="ValidationBPEL.bpel"/>
+   <value n="ValidationBPEL_Namespace" v="http://xmlns.oracle.com/Marqtplaats/ParticipantService/ValidationBPEL"/>
+   <value n="ValidationBPEL_ProcessName" v="ValidationBPEL"/>
+   <value n="ValidationBPEL_Template" v="BPEL_BASE_ON_WSDL"/>
+   <value n="ValidationBPEL_wsdl" v="oramds:/apps/wsdl/abstractValidationService.wsdl"/>
 </jpr:project>
