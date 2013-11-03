@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="windows-1252" ?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:mqt="http://xmlns.qualogy.com/marQtplaats"
+            targetNamespace="http://xmlns.qualogy.com/marQtplaats"
+            elementFormDefault="qualified">
+  <xsd:simpleType name="NickNameType">
+    <xsd:restriction base="xsd:string">
+      <xsd:maxLength value="30"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="PasswordType">
+    <xsd:restriction base="xsd:string">
+      <xsd:maxLength value="30"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="EmailAddressType">
+    <xsd:restriction base="xsd:string">
+      <xsd:maxLength value="250"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="IndicatorType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Y"/>
+      <xsd:enumeration value="N"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType name="ParticipantType">
+    <xsd:sequence>
+      <xsd:element name="NickName" type="mqt:NickNameType"/>
+      <xsd:element name="Password" type="mqt:PasswordType" minOccurs="0"
+                   maxOccurs="1"/>
+      <xsd:element name="EmailAddress" type="mqt:EmailAddressType"/>
+      <xsd:element name="Seller" type="mqt:IndicatorType" maxOccurs="1"
+                   minOccurs="0" default="N"/>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>
