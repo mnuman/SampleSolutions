@@ -17,6 +17,8 @@
           location="participantUpsertService.wsdl" importType="wsdl"/>
   <import namespace="http://xmlns.oracle.com/Marqtplaats/ParticipantService/ValidateEmailBPEL"
           location="ValidateEmailBPEL.wsdl" importType="wsdl"/>
+  <import namespace="http://xmlns.oracle.com/pcbpel/adapter/http/Marqtplaats/ParticipantService/httpCompleter"
+          location="httpCompleter.wsdl" importType="wsdl"/>
   <service name="medParticipants_ep"
            ui:wsdlLocation="oramds:/apps/wsdl/abstractParticipants.wsdl">
     <interface.wsdl interface="urn:medParticipants#wsdl.interface(ParticipantsPort)"/>
@@ -25,6 +27,14 @@
   <service name="medEmailValidator_ep" ui:wsdlLocation="ValidateEmailBPEL.wsdl">
     <interface.wsdl interface="http://xmlns.oracle.com/Marqtplaats/ParticipantService/ValidateEmailBPEL#wsdl.interface(ValidateEmailBPEL)"/>
     <binding.ws port="http://xmlns.oracle.com/Marqtplaats/ParticipantService/ValidateEmailBPEL#wsdl.endpoint(medEmailValidator_ep/ValidateEmailBPEL_pt)"/>
+  </service>
+  <service name="httpCompleter" ui:wsdlLocation="httpCompleter.wsdl">
+    <interface.wsdl interface="http://xmlns.oracle.com/pcbpel/adapter/http/Marqtplaats/ParticipantService/httpCompleter#wsdl.interface(doComplete_ptt)"/>
+    <binding.ws port="http://xmlns.oracle.com/pcbpel/adapter/http/Marqtplaats/ParticipantService/httpCompleter#wsdl.endpoint(httpCompleter/doComplete_pt)"
+                location="httpCompleter.wsdl" supports="http">
+      <property name="http.verb" type="xs:string" many="false">GET</property>
+      <property name="http.payload" type="xs:string" many="false">url-encoded</property>
+    </binding.ws>
   </service>
   <component name="medParticipants">
     <implementation.mediator src="medParticipants.mplan"/>
@@ -38,6 +48,9 @@
   </component>
   <component name="medEmailValidator">
     <implementation.mediator src="medEmailValidator.mplan"/>
+  </component>
+  <component name="mediateHttpCompleter">
+    <implementation.mediator src="mediateHttpCompleter.mplan"/>
   </component>
   <reference name="participantUpsertService"
              ui:wsdlLocation="participantUpsertService.wsdl">
@@ -66,5 +79,13 @@
   <wire>
     <source.uri>medEmailValidator/ValidateEmailBPEL.validateemailbpel_client</source.uri>
     <target.uri>ValidateEmailBPEL/validateemailbpel_client</target.uri>
+  </wire>
+  <wire>
+    <source.uri>httpCompleter</source.uri>
+    <target.uri>mediateHttpCompleter/mediateHttpCompleter</target.uri>
+  </wire>
+  <wire>
+    <source.uri>mediateHttpCompleter/medEmailValidator.medEmailValidator</source.uri>
+    <target.uri>medEmailValidator/medEmailValidator</target.uri>
   </wire>
 </composite>

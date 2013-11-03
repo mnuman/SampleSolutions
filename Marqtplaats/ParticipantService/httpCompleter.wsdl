@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions
+     name="httpCompleter"
+     targetNamespace="http://xmlns.oracle.com/pcbpel/adapter/http/Marqtplaats/ParticipantService/httpCompleter"
+     xmlns:msg_in="http://xmlns.qualogy.com/marQtplaats"
+     xmlns:tns="http://xmlns.oracle.com/pcbpel/adapter/http/Marqtplaats/ParticipantService/httpCompleter"
+     xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+     xmlns:plt="http://schemas.xmlsoap.org/ws/2003/05/partner-link/"
+    >
+    <plt:partnerLinkType name="doComplete_plt">
+        <plt:role name="doComplete_role">
+            <plt:portType name="tns:doComplete_ptt"/>
+        </plt:role>
+    </plt:partnerLinkType>
+    <wsdl:import namespace="http://xmlns.qualogy.com/marQtplaats" location="ValidateEmailBPEL.wsdl"/>
+    <wsdl:message name="aUUID_msg_in">
+        <wsdl:part name="aUUID" element="msg_in:aUUID"/>
+    </wsdl:message>
+    <wsdl:portType name="doComplete_ptt">
+        <wsdl:operation name="doComplete">
+            <wsdl:input message="tns:aUUID_msg_in"/>
+        </wsdl:operation>
+    </wsdl:portType>
+</wsdl:definitions>

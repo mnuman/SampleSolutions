@@ -1,0 +1,2 @@
+The URL to be used for the completion of the process is of the form:
+http://soabpm-vm:7001/soa-infra/services/default/ParticipantService/httpCompleter?operationName=doComplete&aUUID=101
