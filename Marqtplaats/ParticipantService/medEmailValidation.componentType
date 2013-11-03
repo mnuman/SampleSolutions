@@ -8,8 +8,4 @@
            ui:wsdlLocation="oramds:/apps/wsdl/abstractValidationService.wsdl">
     <interface.wsdl interface="http://services.qualogy.com/validationService/1.0#wsdl.interface(validateEmail)"/>
   </service>
-  <reference name="ValidationBPEL.validationbpel_client"
-             ui:wsdlLocation="abstractValidationServiceWrapper.wsdl">
-    <interface.wsdl interface="http://services.qualogy.com/validationService/1.0#wsdl.interface(validateEmail)"/>
-  </reference>
 </componentType>
