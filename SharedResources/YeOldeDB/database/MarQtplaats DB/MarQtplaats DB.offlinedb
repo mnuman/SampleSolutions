@@ -1,0 +1,9 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<ProviderSettings xmlns="http://xmlns.oracle.com/ide/hash">
+   <hash n="dataTypeSettings">
+      <value n="sourceKey" v="oracle.javatools.db.ora.Oracle11gR2"/>
+   </hash>
+   <value n="id" v="1e2115f1-0142-1000-8002-a9fe574e3367"/>
+   <value n="name" v="MarQtplaats DB"/>
+   <value n="offlineDBSchema" v="MQT"/>
+</ProviderSettings>

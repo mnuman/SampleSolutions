@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<definitions targetNamespace="urn:medParticipants"
+             xmlns="http://schemas.xmlsoap.org/wsdl/"
+             xmlns:tns="urn:medParticipants"
+             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+             xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+             xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+             xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+             xmlns:xqcm="http://xmlns.qualogy.com/marQtplaats">
+  <types>
+    <xsd:schema>
+      <xsd:import schemaLocation="oramds:/apps/xsd/MarQtplaats.xsd"
+                  namespace="http://xmlns.qualogy.com/marQtplaats"/>
+    </xsd:schema>
+  </types>
+  <message name="ParticipantMessage">
+    <part name="payload" element="xqcm:Participant"/>
+  </message>
+  <message name="StatusMessage">
+    <part name="payload" element="xqcm:StatusResponse"/>
+  </message>
+  <portType name="ParticipantsPort">
+    <documentation>
+      Abstract WSDL, just defining the interface (operations plus message
+      structures).
+    </documentation>
+    <operation name="insert">
+      <input message="tns:ParticipantMessage"/>
+      <output message="tns:StatusMessage"/>
+    </operation>
+  </portType>
+</definitions>

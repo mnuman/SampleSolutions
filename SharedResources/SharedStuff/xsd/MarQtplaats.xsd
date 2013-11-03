@@ -34,4 +34,37 @@
                    minOccurs="0" default="N"/>
     </xsd:sequence>
   </xsd:complexType>
+  <xsd:complexType name="internalParticipantType">
+    <xsd:annotation>
+      <xsd:documentation>
+        Internal data types should preferrably be from another namespace and
+        stored in another schema file, in order not to expose internal
+        implementation details.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="NickName" type="mqt:NickNameType"/>
+      <xsd:element name="Password" type="mqt:PasswordType" minOccurs="0"
+                   maxOccurs="1"/>
+      <xsd:element name="EmailAddress" type="mqt:EmailAddressType"/>
+      <xsd:element name="RegistrationDate" type="xsd:date" minOccurs="0"
+                   maxOccurs="1"/>
+      <xsd:element name="AdmissionDate" type="xsd:date" maxOccurs="1"
+                   minOccurs="0"/>
+      <xsd:element name="TerminationDate" type="xsd:date" maxOccurs="1"
+                   minOccurs="0"/>
+      <xsd:element name="Validated" type="mqt:IndicatorType" maxOccurs="1"
+                   minOccurs="0" default="N"/>
+      <xsd:element name="Seller" type="mqt:IndicatorType" maxOccurs="1"
+                   minOccurs="0" default="N"/>
+      <xsd:element name="Locked" type="mqt:IndicatorType" maxOccurs="1"
+                   minOccurs="0" default="N"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:simpleType name="statusCode">
+    <xsd:restriction base="xsd:int"/>
+  </xsd:simpleType>
+  <xsd:element name="Participant" type="mqt:ParticipantType"/>
+  <xsd:element name="InternalParticipant" type="mqt:internalParticipantType"/>
+  <xsd:element name="StatusResponse" type="mqt:statusCode"/>
 </xsd:schema>

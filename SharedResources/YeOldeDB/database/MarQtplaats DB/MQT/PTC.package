@@ -1,0 +1,202 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<package xmlns="http://xmlns.oracle.com/jdeveloper/1111/offlinedb">
+  <ID class="oracle.javatools.db.IdentifierBasedID">
+    <identifier class="java.lang.String">79586a3e-eeb1-4313-8e95-5d1ed420f726</identifier>
+  </ID>
+  <name>PTC</name>
+  <bodySource>CREATE OR REPLACE PACKAGE BODY ptc AS
+
+  PROCEDURE upsert( p_nickname  IN VARCHAR2
+                  , p_password  IN VARCHAR2 DEFAULT NULL
+                  , p_email     IN VARCHAR2 DEFAULT NULL
+                  , p_reg_date  IN DATE DEFAULT NULL
+                  , p_adm_date  IN DATE DEFAULT NULL
+                  , p_ter_date  IN DATE DEFAULT NULL
+                  , p_validated IN VARCHAR2 DEFAULT NULL
+                  , p_seller    IN VARCHAR2 DEFAULT NULL
+                  , p_locked    IN VARCHAR2 DEFAULT NULL
+                  , x_status    OUT  PLS_INTEGER
+                  ) AS
+    CURSOR c_pctp( b_nickname  VARCHAR2) IS
+      SELECT 1
+      FROM   participants
+      WHERE  nickname = b_nickname
+    ;  
+    l_pctp INTEGER;         
+  BEGIN
+    OPEN c_pctp(p_nickname);
+    FETCH c_pctp INTO l_pctp;
+    CLOSE c_pctp;
+    
+    IF l_pctp IS NULL THEN
+      INSERT INTO participants p(p.nickname, p.password, p.emailaddress, p.registration_date, p.admission_date, p.termination_date, p.validated, p.seller, p.locked )
+      VALUES ( p_nickname, p_password, p_email, nvl(p_reg_date,SYSDATE), p_adm_date, p_ter_date, nvl(p_validated,&apos;N&apos;), nvl(p_seller,&apos;N&apos;), nvl(p_locked,&apos;N&apos;))
+      ;      
+    ELSE
+      UPDATE participants p
+      SET  p.password     = nvl( p_password,p.password)
+      ,    p.emailaddress = nvl( p_email, p.emailaddress)
+      ,    p.registration_date = nvl( p_reg_date, p.registration_date)
+      ,    p.admission_date    = nvl( p_adm_date, p.admission_date)
+      ,    p.termination_date  = nvl( p_ter_date, p.termination_date)
+      ,    p.validated = nvl( p_validated, p.validated)
+      ,    p.seller    = nvl( p_seller, p.seller)
+      ,    p.locked    = nvl( p_locked, p.locked)
+      WHERE p.nickname = p_nickname
+      ;
+    END IF;
+    x_status := 1;
+    -- signal error by returning the SQLCode, which is &lt; 0
+    EXCEPTION
+      WHEN OTHERS THEN
+        x_status := SQLCODE;
+  END;
+END;  
+</bodySource>
+  <methods>
+    <method>
+      <ID class="oracle.javatools.db.IdentifierBasedID">
+        <identifier class="java.lang.String">1025c6b7-7992-45f4-88e1-d006f0a9e3a5</identifier>
+      </ID>
+      <name>UPSERT</name>
+      <callSpecWithContext>false</callSpecWithContext>
+      <final>false</final>
+      <instantiable>true</instantiable>
+      <overriding>false</overriding>
+      <parameters>
+        <parameter>
+          <ID class="oracle.javatools.db.IdentifierBasedID">
+            <identifier class="java.lang.String">e03add71-2681-4b9d-a0c2-234f93de8e87</identifier>
+          </ID>
+          <name>P_NICKNAME</name>
+          <dataTypeID class="oracle.javatools.db.datatypes.DataTypeID">
+            <providerClass>oracle.javatools.db.ora.Oracle9i</providerClass>
+            <typeName>VARCHAR2</typeName>
+          </dataTypeID>
+          <noCopy>false</noCopy>
+        </parameter>
+        <parameter>
+          <ID class="oracle.javatools.db.IdentifierBasedID">
+            <identifier class="java.lang.String">4af0f9a8-76f9-42e1-b751-2e29e4a791bf</identifier>
+          </ID>
+          <name>P_PASSWORD</name>
+          <dataTypeID class="oracle.javatools.db.datatypes.DataTypeID">
+            <providerClass>oracle.javatools.db.ora.Oracle9i</providerClass>
+            <typeName>VARCHAR2</typeName>
+          </dataTypeID>
+          <noCopy>false</noCopy>
+        </parameter>
+        <parameter>
+          <ID class="oracle.javatools.db.IdentifierBasedID">
+            <identifier class="java.lang.String">f2e4eb5c-27b5-4213-a14d-a86e54f6decb</identifier>
+          </ID>
+          <name>P_EMAIL</name>
+          <dataTypeID class="oracle.javatools.db.datatypes.DataTypeID">
+            <providerClass>oracle.javatools.db.ora.Oracle9i</providerClass>
+            <typeName>VARCHAR2</typeName>
+          </dataTypeID>
+          <noCopy>false</noCopy>
+        </parameter>
+        <parameter>
+          <ID class="oracle.javatools.db.IdentifierBasedID">
+            <identifier class="java.lang.String">2ae81d59-b19b-4d81-8d0e-d9c569e951df</identifier>
+          </ID>
+          <name>P_REG_DATE</name>
+          <dataTypeID class="oracle.javatools.db.datatypes.DataTypeID">
+            <providerClass>oracle.javatools.db.ora.OracleDatabaseImpl</providerClass>
+            <typeName>DATE</typeName>
+          </dataTypeID>
+          <noCopy>false</noCopy>
+        </parameter>
+        <parameter>
+          <ID class="oracle.javatools.db.IdentifierBasedID">
+            <identifier class="java.lang.String">efdd834e-96f6-4711-8633-802126ee30f2</identifier>
+          </ID>
+          <name>P_ADM_DATE</name>
+          <dataTypeID class="oracle.javatools.db.datatypes.DataTypeID">
+            <providerClass>oracle.javatools.db.ora.OracleDatabaseImpl</providerClass>
+            <typeName>DATE</typeName>
+          </dataTypeID>
+          <noCopy>false</noCopy>
+        </parameter>
+        <parameter>
+          <ID class="oracle.javatools.db.IdentifierBasedID">
+            <identifier class="java.lang.String">bfae4763-1034-4673-9a41-b23334087bf3</identifier>
+          </ID>
+          <name>P_TER_DATE</name>
+          <dataTypeID class="oracle.javatools.db.datatypes.DataTypeID">
+            <providerClass>oracle.javatools.db.ora.OracleDatabaseImpl</providerClass>
+            <typeName>DATE</typeName>
+          </dataTypeID>
+          <noCopy>false</noCopy>
+        </parameter>
+        <parameter>
+          <ID class="oracle.javatools.db.IdentifierBasedID">
+            <identifier class="java.lang.String">e631fb11-f035-46a5-bf45-c63b2b2ce0e6</identifier>
+          </ID>
+          <name>P_VALIDATED</name>
+          <dataTypeID class="oracle.javatools.db.datatypes.DataTypeID">
+            <providerClass>oracle.javatools.db.ora.Oracle9i</providerClass>
+            <typeName>VARCHAR2</typeName>
+          </dataTypeID>
+          <noCopy>false</noCopy>
+        </parameter>
+        <parameter>
+          <ID class="oracle.javatools.db.IdentifierBasedID">
+            <identifier class="java.lang.String">59d4b7f2-3cdf-4c4e-9846-c3a4f83100f1</identifier>
+          </ID>
+          <name>P_SELLER</name>
+          <dataTypeID class="oracle.javatools.db.datatypes.DataTypeID">
+            <providerClass>oracle.javatools.db.ora.Oracle9i</providerClass>
+            <typeName>VARCHAR2</typeName>
+          </dataTypeID>
+          <noCopy>false</noCopy>
+        </parameter>
+        <parameter>
+          <ID class="oracle.javatools.db.IdentifierBasedID">
+            <identifier class="java.lang.String">5a33c463-293e-4ae0-89ae-a8da70d2f352</identifier>
+          </ID>
+          <name>P_LOCKED</name>
+          <dataTypeID class="oracle.javatools.db.datatypes.DataTypeID">
+            <providerClass>oracle.javatools.db.ora.Oracle9i</providerClass>
+            <typeName>VARCHAR2</typeName>
+          </dataTypeID>
+          <noCopy>false</noCopy>
+        </parameter>
+        <parameter>
+          <ID class="oracle.javatools.db.IdentifierBasedID">
+            <identifier class="java.lang.String">96a94740-1e0b-4a6f-870c-79b22e04383a</identifier>
+          </ID>
+          <name>X_STATUS</name>
+          <dataTypeID class="oracle.javatools.db.datatypes.DataTypeID">
+            <providerClass>oracle.javatools.db.ora.Oracle11gR2</providerClass>
+            <typeName>PLS_INTEGER</typeName>
+          </dataTypeID>
+          <noCopy>false</noCopy>
+        </parameter>
+      </parameters>
+    </method>
+  </methods>
+  <schema>
+    <name>MQT</name>
+  </schema>
+  <source>CREATE OR REPLACE PACKAGE ptc
+as 
+
+  /* 
+   * Provide data to insert the participant record, return a 
+   * statuscode. Statuscodes &gt; 0 indicates success, &lt;= 0 represents failures.
+   */
+  procedure upsert( p_nickname  in varchar2 default null
+                  , p_password  IN VARCHAR2 DEFAULT NULL
+                  , p_email     IN VARCHAR2 DEFAULT NULL
+                  , p_reg_date  IN DATE DEFAULT NULL
+                  , p_adm_date  IN DATE DEFAULT NULL
+                  , p_ter_date  IN DATE DEFAULT NULL
+                  , p_validated IN VARCHAR2 DEFAULT NULL
+                  , p_seller    IN VARCHAR2 DEFAULT NULL
+                  , p_locked    IN VARCHAR2 DEFAULT NULL
+                  , x_status    OUT  PLS_INTEGER
+                  );
+end ptc;</source>
+</package>
