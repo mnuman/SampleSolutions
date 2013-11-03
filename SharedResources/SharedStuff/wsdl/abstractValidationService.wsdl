@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<definitions targetNamespace="http://services.qualogy.com/validationService/1.0"
+             xmlns="http://schemas.xmlsoap.org/wsdl/"
+             xmlns:tns="http://services.qualogy.com/validationService/1.0"
+             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+             xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+             xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+             xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+             xmlns:xqcm="http://xmlns.qualogy.com/marQtplaats">
+  <types>
+    <xsd:schema>
+      <xsd:import schemaLocation="oramds:/apps/xsd/MarQtplaats.xsd"
+                  namespace="http://xmlns.qualogy.com/marQtplaats"/>
+    </xsd:schema>
+  </types>
+  <message name="validateEmailAddress">
+    <part name="payload" element="xqcm:uniqueReference"/>
+  </message>
+  <portType name="validateEmail">
+    <operation name="doValidate">
+      <input message="tns:validateEmailAddress"/>
+    </operation>
+    <operation name="startValidation">
+      <input message="tns:startValidateEmailAddressMessage"/>
+    </operation>
+  </portType>
+  <message name="startValidateEmailAddressMessage">
+    <part name="payload" element="xqcm:validationEmailAddress"/>
+  </message>
+</definitions>
