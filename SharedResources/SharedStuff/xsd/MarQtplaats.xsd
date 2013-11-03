@@ -67,19 +67,4 @@
   <xsd:element name="Participant" type="mqt:ParticipantType"/>
   <xsd:element name="InternalParticipant" type="mqt:internalParticipantType"/>
   <xsd:element name="StatusResponse" type="mqt:statusCode"/>
-  <xsd:simpleType name="uniqueReferenceType">
-    <xsd:restriction base="xsd:string">
-      <xsd:maxLength value="256"/>
-      <xsd:minLength value="1"/>
-    </xsd:restriction>
-  </xsd:simpleType>
-  <xsd:element name="uniqueReference" type="mqt:uniqueReferenceType"/>
-  <xsd:complexType name="validationEmailAddressType">
-    <xsd:sequence>
-      <xsd:element name="Nickname" type="mqt:NickNameType"/>
-      <xsd:element name="UniqueReference" type="mqt:uniqueReferenceType"/>
-    </xsd:sequence>
-  </xsd:complexType>
-  <xsd:element name="validationEmailAddress"
-               type="mqt:validationEmailAddressType"/>
 </xsd:schema>
