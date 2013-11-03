@@ -1,0 +1,93 @@
+<?xml version = "1.0" encoding = "UTF-8" ?>
+<!--
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  Oracle JDeveloper BPEL Designer 
+  
+  Created: Sun Nov 03 22:59:12 CET 2013
+  Author:  mnuman
+  Type: BPEL 2.0 Process
+  Purpose: One Way BPEL Process
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-->
+<process name="ValidateEmailBPEL"
+               targetNamespace="http://xmlns.oracle.com/Marqtplaats/ParticipantService/ValidateEmailBPEL"
+               xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable"
+               xmlns:client="http://xmlns.oracle.com/Marqtplaats/ParticipantService/ValidateEmailBPEL"
+               xmlns:ora="http://schemas.oracle.com/xpath/extension"
+               xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable"
+         xmlns:ns1="http://xmlns.qualogy.com/marQtplaats"
+         xmlns:ns2="http://xmlns.oracle.com/Marqtplaats/ParticipantService/ValidateEmailBPEL/correlationset"
+         xmlns:bpelx="http://schemas.oracle.com/bpel/extension"
+         xmlns:bpws="http://schemas.xmlsoap.org/ws/2003/03/business-process/"
+         xmlns:xp20="http://www.oracle.com/XSL/Transform/java/oracle.tip.pc.services.functions.Xpath20"
+         xmlns:oraext="http://www.oracle.com/XSL/Transform/java/oracle.tip.pc.services.functions.ExtFunc"
+         xmlns:dvm="http://www.oracle.com/XSL/Transform/java/oracle.tip.dvm.LookupValue"
+         xmlns:hwf="http://xmlns.oracle.com/bpel/workflow/xpath"
+         xmlns:ids="http://xmlns.oracle.com/bpel/services/IdentityService/xpath"
+         xmlns:bpm="http://xmlns.oracle.com/bpmn20/extensions"
+         xmlns:xdk="http://schemas.oracle.com/bpel/extension/xpath/function/xdk"
+         xmlns:xref="http://www.oracle.com/XSL/Transform/java/oracle.tip.xref.xpath.XRefXPathFunctions"
+         xmlns:ldap="http://schemas.oracle.com/xpath/extension/ldap">
+
+  <import namespace="http://xmlns.oracle.com/Marqtplaats/ParticipantService/ValidateEmailBPEL" location="ValidateEmailBPEL.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
+  <!-- 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      PARTNERLINKS                                                      
+      List of services participating in this BPEL process               
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  --> 
+  <partnerLinks>
+    <!-- 
+      The 'client' role represents the requester of this service. It is 
+      used for callback. The location and correlation information associated
+      with the client role are automatically set using WS-Addressing.
+    -->
+    <partnerLink name="validateemailbpel_client" partnerLinkType="client:ValidateEmailBPEL" myRole="ValidateEmailBPELProvider"/>
+  </partnerLinks>
+
+  <!-- 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      VARIABLES                                                        
+      List of messages and XML documents used within this BPEL process 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  -->
+  <variables>
+    <!-- Reference to the message passed as input during initiation -->
+    <variable name="inputVariable" messageType="client:ValidateEmailBPELRequestMessage"/>
+    <variable name="completeValidation"
+              messageType="client:CompleteValidationBPELRequestMessage"/>
+  </variables>
+  <correlationSets>
+    <correlationSet name="csUUID" properties="ns2:UUID"/>
+  </correlationSets>
+  <!-- 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     ORCHESTRATION LOGIC                                               
+     Set of activities coordinating the flow of messages across the    
+     services integrated within this business process                  
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  -->
+  <sequence name="main">
+
+    <!-- Receive input from requestor. (Note: This maps to operation defined in ValidateEmailBPEL.wsdl) -->
+    <receive name="receiveInput" partnerLink="validateemailbpel_client" portType="client:ValidateEmailBPEL" operation="process" variable="inputVariable" createInstance="yes">
+      <correlations>
+        <correlation set="csUUID" initiate="yes"/>
+      </correlations>
+    </receive>
+    <pick name="Pick1">
+      <onMessage variable="completeValidation"
+                 partnerLink="validateemailbpel_client"
+                 portType="client:ValidateEmailBPEL" operation="complete">
+        <correlations>
+          <correlation set="csUUID" initiate="no"/>
+        </correlations>
+        <empty name="null"/>
+      </onMessage>
+      <onAlarm>
+        <for>ora:getPreference('customTimeout')</for>
+        <empty name="nullAgain"/>
+      </onAlarm>
+    </pick>
+  </sequence>
+</process>

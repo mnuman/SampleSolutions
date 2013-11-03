@@ -60,6 +60,7 @@
       <string v="oracle.tip.tools.ide.fabric.addin.SCAContentSetProvider/sca-content"/>
    </list>
    <value n="defaultPackage" v="participantservice"/>
+   <value n="Namespace" v="http://xmlns.oracle.com/Marqtplaats/ParticipantService/ValidateEmailBPEL"/>
    <hash n="oracle.ide.model.ResourcePaths">
       <hash n="resourcesContentSet">
          <list n="url-path"/>
@@ -352,4 +353,11 @@
          </list>
       </hash>
    </hash>
+   <value n="ProcessName" v="ValidateEmailBPEL"/>
+   <value n="Template" v="BPEL_ONE_WAY_PROCESS"/>
+   <url n="ValidateEmailBPEL_bpelFileURL" path="ValidateEmailBPEL.bpel"/>
+   <value n="ValidateEmailBPEL_Namespace" v="http://xmlns.oracle.com/Marqtplaats/ParticipantService/ValidateEmailBPEL"/>
+   <value n="ValidateEmailBPEL_ProcessName" v="ValidateEmailBPEL"/>
+   <value n="ValidateEmailBPEL_Template" v="BPEL_ONE_WAY_PROCESS"/>
+   <value n="ValidateEmailBPEL_wsdl" v="ValidateEmailBPEL.wsdl"/>
 </jpr:project>
