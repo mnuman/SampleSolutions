@@ -22,10 +22,9 @@
     <interface.wsdl interface="urn:medParticipants#wsdl.interface(ParticipantsPort)"/>
     <binding.ws port="urn:medParticipants#wsdl.endpoint(medParticipants_ep/ParticipantsPort_pt)"/>
   </service>
-  <service name="validateemailbpel_client_ep"
-           ui:wsdlLocation="ValidateEmailBPEL.wsdl">
+  <service name="medEmailValidator_ep" ui:wsdlLocation="ValidateEmailBPEL.wsdl">
     <interface.wsdl interface="http://xmlns.oracle.com/Marqtplaats/ParticipantService/ValidateEmailBPEL#wsdl.interface(ValidateEmailBPEL)"/>
-    <binding.ws port="http://xmlns.oracle.com/Marqtplaats/ParticipantService/ValidateEmailBPEL#wsdl.endpoint(validateemailbpel_client_ep/ValidateEmailBPEL_pt)"/>
+    <binding.ws port="http://xmlns.oracle.com/Marqtplaats/ParticipantService/ValidateEmailBPEL#wsdl.endpoint(medEmailValidator_ep/ValidateEmailBPEL_pt)"/>
   </service>
   <component name="medParticipants">
     <implementation.mediator src="medParticipants.mplan"/>
@@ -36,6 +35,9 @@
               many="false">async.persist</property>
     <property name="bpel.preference.customTimeout" type="xs:string"
               many="false">PT1H</property>
+  </component>
+  <component name="medEmailValidator">
+    <implementation.mediator src="medEmailValidator.mplan"/>
   </component>
   <reference name="participantUpsertService"
              ui:wsdlLocation="participantUpsertService.wsdl">
@@ -58,7 +60,11 @@
     <target.uri>participantUpsertService</target.uri>
   </wire>
   <wire>
-    <source.uri>validateemailbpel_client_ep</source.uri>
+    <source.uri>medEmailValidator_ep</source.uri>
+    <target.uri>medEmailValidator/medEmailValidator</target.uri>
+  </wire>
+  <wire>
+    <source.uri>medEmailValidator/ValidateEmailBPEL.validateemailbpel_client</source.uri>
     <target.uri>ValidateEmailBPEL/validateemailbpel_client</target.uri>
   </wire>
 </composite>
