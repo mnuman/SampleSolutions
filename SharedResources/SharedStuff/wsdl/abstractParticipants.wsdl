@@ -22,6 +22,9 @@
   <message name="LookupEmailAddresRequest">
     <part name="payload" element="xqcm:NickName"/>
   </message>  
+  <message name="ParticipantIdentification">
+    <part name="payload" element="xqcm:NickName"/>
+  </message>  
   <message name="LookupEmailAddresResponse">
       <part name="payload" element="xqcm:EmailAddress"/>
   </message>
@@ -37,6 +40,12 @@
     <operation name="lookupEmail">
       <input message="tns:LookupEmailAddresRequest"/>
       <output message="tns:LookupEmailAddresResponse"/>
+    </operation>
+    <operation name="lockParticipant">
+    <input message="tns:ParticipantIdentification"/>
+    </operation>
+    <operation name="makeParticipantValidated">
+    <input message="tns:ParticipantIdentification"/>
     </operation>
   </portType>
 </definitions>

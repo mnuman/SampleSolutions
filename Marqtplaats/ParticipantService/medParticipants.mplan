@@ -48,4 +48,32 @@
          </case>
       </switch>
    </operation>
+   <operation name="lockParticipant" deliveryPolicy="AllOrNothing" priority="4"
+              validateSchema="false">
+      <switch>
+         <case executionType="direct" name="LockParticipant.update">
+            <action>
+               <transform>
+                  <part name="$out.ParticipantsCollection"
+                        function="xslt(xsl/NickName_To_ParticipantsCollection.xsl, $in.payload)"/>
+               </transform>
+               <invoke reference="LockParticipant" operation="update"/>
+            </action>
+         </case>
+      </switch>
+   </operation>
+   <operation name="makeParticipantValidated" deliveryPolicy="AllOrNothing"
+              priority="4" validateSchema="false">
+      <switch>
+         <case executionType="direct" name="ParticipantValidated.update">
+            <action>
+               <transform>
+                  <part name="$out.ParticipantsCollection"
+                        function="xslt(xsl/NickName_To_ParticipantsCollection_2.xsl, $in.payload)"/>
+               </transform>
+               <invoke reference="ParticipantValidated" operation="update"/>
+            </action>
+         </case>
+      </switch>
+   </operation>
 </Mediator>

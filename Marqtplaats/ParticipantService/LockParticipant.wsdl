@@ -1,0 +1,21 @@
+<?binding.jca LockParticipant_db.jca?>
+<wsdl:definitions name="LockParticipant" targetNamespace="http://xmlns.oracle.com/pcbpel/adapter/db/Marqtplaats/ParticipantService/LockParticipant" xmlns:tns="http://xmlns.oracle.com/pcbpel/adapter/db/Marqtplaats/ParticipantService/LockParticipant" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:plt="http://schemas.xmlsoap.org/ws/2003/05/partner-link/" xmlns:top="http://xmlns.oracle.com/pcbpel/adapter/db/top/LockParticipant">
+    <plt:partnerLinkType name="LockParticipant_plt">
+        <plt:role name="LockParticipant_role">
+            <plt:portType name="tns:LockParticipant_ptt"/>
+        </plt:role>
+    </plt:partnerLinkType>
+    <wsdl:types>
+        <schema xmlns="http://www.w3.org/2001/XMLSchema">
+            <import namespace="http://xmlns.oracle.com/pcbpel/adapter/db/top/LockParticipant" schemaLocation="xsd/LockParticipant_table.xsd"/>
+        </schema>
+    </wsdl:types>
+    <wsdl:message name="ParticipantsCollection_msg">
+        <wsdl:part name="ParticipantsCollection" element="top:ParticipantsCollection"/>
+    </wsdl:message>
+    <wsdl:portType name="LockParticipant_ptt">
+        <wsdl:operation name="update">
+            <wsdl:input message="tns:ParticipantsCollection_msg"/>
+        </wsdl:operation>
+    </wsdl:portType>
+</wsdl:definitions>

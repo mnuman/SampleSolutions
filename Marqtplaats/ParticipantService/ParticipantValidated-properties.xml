@@ -1,0 +1,39 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+   <entry key="PARTICIPANTS.PASSWORD:db_column_not_null">false</entry>
+   <entry key="PARTICIPANTS:db_column_0">NICKNAME</entry>
+   <entry key="PARTICIPANTS.LOCKED:db_column_size">1</entry>
+   <entry key="PARTICIPANTS.PASSWORD:db_column_type">VARCHAR2</entry>
+   <entry key="PARTICIPANTS.LOCKED:db_column_not_null">true</entry>
+   <entry key="PARTICIPANTS.TERMINATION_DATE:db_column_not_null">false</entry>
+   <entry key="PARTICIPANTS.EMAILADDRESS:db_column_size">250</entry>
+   <entry key="PARTICIPANTS.REGISTRATION_DATE:db_column_not_null">true</entry>
+   <entry key="PARTICIPANTS.VALIDATED:db_column_not_null">true</entry>
+   <entry key="PARTICIPANTS.SELLER:db_column_type">VARCHAR2</entry>
+   <entry key="PARTICIPANTS.VALIDATED:db_column_size">1</entry>
+   <entry key="PARTICIPANTS.PASSWORD:db_column_size">30</entry>
+   <entry key="PARTICIPANTS.TERMINATION_DATE:db_column_type">DATE</entry>
+   <entry key="PARTICIPANTS:db_table_type">TABLE</entry>
+   <entry key="PARTICIPANTS.NICKNAME:db_column_not_null">true</entry>
+   <entry key="PARTICIPANTS.NICKNAME:db_column_type">VARCHAR2</entry>
+   <entry key="PARTICIPANTS.ADMISSION_DATE:db_column_not_null">false</entry>
+   <entry key="PARTICIPANTS.ADMISSION_DATE:db_column_type">DATE</entry>
+   <entry key="PARTICIPANTS.LOCKED:db_column_type">VARCHAR2</entry>
+   <entry key="PARTICIPANTS.EMAILADDRESS:db_column_not_null">true</entry>
+   <entry key="PARTICIPANTS.SELLER:db_column_not_null">true</entry>
+   <entry key="PARTICIPANTS.SELLER:db_column_size">1</entry>
+   <entry key="root_descriptor_alias">PARTICIPANTS</entry>
+   <entry key="PARTICIPANTS.EMAILADDRESS:db_column_type">VARCHAR2</entry>
+   <entry key="PARTICIPANTS:db_column_8">LOCKED</entry>
+   <entry key="PARTICIPANTS.REGISTRATION_DATE:db_column_type">DATE</entry>
+   <entry key="PARTICIPANTS:db_column_7">SELLER</entry>
+   <entry key="PARTICIPANTS:db_column_6">VALIDATED</entry>
+   <entry key="PARTICIPANTS:db_column_5">TERMINATION_DATE</entry>
+   <entry key="PARTICIPANTS.VALIDATED:db_column_type">VARCHAR2</entry>
+   <entry key="PARTICIPANTS.NICKNAME:db_column_size">30</entry>
+   <entry key="PARTICIPANTS:db_column_4">ADMISSION_DATE</entry>
+   <entry key="PARTICIPANTS:db_column_3">REGISTRATION_DATE</entry>
+   <entry key="PARTICIPANTS:db_column_2">EMAILADDRESS</entry>
+   <entry key="PARTICIPANTS:db_column_1">PASSWORD</entry>
+</properties>

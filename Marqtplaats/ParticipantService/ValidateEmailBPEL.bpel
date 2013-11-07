@@ -66,6 +66,10 @@
     <variable name="completeValidation"
               messageType="client:CompleteValidationBPELRequestMessage"/>
     <variable name="emailAddress" messageType="ns3:LookupEmailAddresResponse"/>
+    <variable name="validatedNickname"
+              messageType="ns3:ParticipantIdentification"/>
+    <variable name="lockerNickname"
+              messageType="ns3:ParticipantIdentification"/>
   </variables>
   <correlationSets>
     <correlationSet name="csUUID" properties="ns2:UUID"/>
@@ -202,11 +206,34 @@ Please cut and paste this link into the address bar of your web browser to compl
         <correlations>
           <correlation set="csUUID" initiate="no"/>
         </correlations>
-        <empty name="null"/>
+        <sequence name="Sequence4">
+          <assign name="setValidatedNickname">
+            <copy>
+              <from>$inputVariable.payload/ns1:NickName</from>
+              <to>$validatedNickname.payload</to>
+            </copy>
+          </assign>
+          <invoke name="invokeValidator"
+                  partnerLink="medParticipants.medParticipants"
+                  portType="ns3:ParticipantsPort"
+                  operation="makeParticipantValidated"
+                  inputVariable="validatedNickname" bpelx:invokeAsDetail="no"/>
+        </sequence>
       </onMessage>
       <onAlarm>
         <for>ora:getPreference('customTimeout')</for>
-        <empty name="nullAgain"/>
+        <sequence name="Sequence5">
+          <assign name="setLockerNickname">
+            <copy>
+              <from>$inputVariable.payload/ns1:NickName</from>
+              <to>$lockerNickname.payload</to>
+            </copy>
+          </assign>
+          <invoke name="invokeLocker"
+                  partnerLink="medParticipants.medParticipants"
+                  portType="ns3:ParticipantsPort" operation="lockParticipant"
+                  inputVariable="lockerNickname" bpelx:invokeAsDetail="no"/>
+        </sequence>
       </onAlarm>
     </pick>
   </sequence>

@@ -29,6 +29,10 @@
           location="abstractParticipantsWrapper1.wsdl" importType="wsdl"/>
   <import namespace="http://xmlns.oracle.com/ias/pcbpel/NotificationService"
           location="NotificationService.wsdl" importType="wsdl"/>
+  <import namespace="http://xmlns.oracle.com/pcbpel/adapter/db/Marqtplaats/ParticipantService/LockParticipant"
+          location="LockParticipant.wsdl" importType="wsdl"/>
+  <import namespace="http://xmlns.oracle.com/pcbpel/adapter/db/Marqtplaats/ParticipantService/ParticipantValidated"
+          location="ParticipantValidated.wsdl" importType="wsdl"/>
   <service name="medEmailValidator_ep" ui:wsdlLocation="ValidateEmailBPEL.wsdl">
     <interface.wsdl interface="http://xmlns.oracle.com/Marqtplaats/ParticipantService/ValidateEmailBPEL#wsdl.interface(ValidateEmailBPEL)"/>
     <binding.ws port="http://xmlns.oracle.com/Marqtplaats/ParticipantService/ValidateEmailBPEL#wsdl.endpoint(medEmailValidator_ep/ValidateEmailBPEL_pt)"/>
@@ -97,6 +101,29 @@
     <binding.wsif port="http://xmlns.oracle.com/ias/pcbpel/NotificationService#wsdl.endpoint(NotificationService/JavaPort)"
                   location="NotificationService.wsdl"/>
   </reference>
+  <reference name="LockParticipant" ui:wsdlLocation="LockParticipant.wsdl">
+    <interface.wsdl interface="http://xmlns.oracle.com/pcbpel/adapter/db/Marqtplaats/ParticipantService/LockParticipant#wsdl.interface(LockParticipant_ptt)"/>
+    <binding.jca config="LockParticipant_db.jca"/>
+    <property name="jca.retry.count" type="xs:int" many="false" override="may">4</property>
+    <property name="jca.retry.interval" type="xs:int" many="false"
+              override="may">1</property>
+    <property name="jca.retry.backoff" type="xs:int" many="false"
+              override="may">2</property>
+    <property name="jca.retry.maxInterval" type="xs:string" many="false"
+              override="may">120</property>
+  </reference>
+  <reference name="ParticipantValidated"
+             ui:wsdlLocation="ParticipantValidated.wsdl">
+    <interface.wsdl interface="http://xmlns.oracle.com/pcbpel/adapter/db/Marqtplaats/ParticipantService/ParticipantValidated#wsdl.interface(ParticipantValidated_ptt)"/>
+    <binding.jca config="ParticipantValidated_db.jca"/>
+    <property name="jca.retry.count" type="xs:int" many="false" override="may">4</property>
+    <property name="jca.retry.interval" type="xs:int" many="false"
+              override="may">1</property>
+    <property name="jca.retry.backoff" type="xs:int" many="false"
+              override="may">2</property>
+    <property name="jca.retry.maxInterval" type="xs:string" many="false"
+              override="may">120</property>
+  </reference>
   <wire>
     <source.uri>medParticipants/participantUpsertService</source.uri>
     <target.uri>participantUpsertService</target.uri>
@@ -140,5 +167,13 @@
   <wire>
     <source.uri>ValidateEmailBPEL/NotificationService1</source.uri>
     <target.uri>NotificationService1</target.uri>
+  </wire>
+  <wire>
+    <source.uri>medParticipants/ParticipantValidated</source.uri>
+    <target.uri>ParticipantValidated</target.uri>
+  </wire>
+  <wire>
+    <source.uri>medParticipants/LockParticipant</source.uri>
+    <target.uri>LockParticipant</target.uri>
   </wire>
 </composite>

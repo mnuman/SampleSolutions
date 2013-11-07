@@ -16,4 +16,11 @@
              ui:wsdlLocation="EmailLookupService.wsdl">
     <interface.wsdl interface="http://xmlns.oracle.com/pcbpel/adapter/db/Marqtplaats/ParticipantService/EmailLookupService#wsdl.interface(EmailLookupService_ptt)"/>
   </reference>
+  <reference name="ParticipantValidated"
+             ui:wsdlLocation="ParticipantValidated.wsdl">
+    <interface.wsdl interface="http://xmlns.oracle.com/pcbpel/adapter/db/Marqtplaats/ParticipantService/ParticipantValidated#wsdl.interface(ParticipantValidated_ptt)"/>
+  </reference>
+  <reference name="LockParticipant" ui:wsdlLocation="LockParticipant.wsdl">
+    <interface.wsdl interface="http://xmlns.oracle.com/pcbpel/adapter/db/Marqtplaats/ParticipantService/LockParticipant#wsdl.interface(LockParticipant_ptt)"/>
+  </reference>
 </componentType>
