@@ -27,7 +27,9 @@
          xmlns:bpm="http://xmlns.oracle.com/bpmn20/extensions"
          xmlns:xdk="http://schemas.oracle.com/bpel/extension/xpath/function/xdk"
          xmlns:xref="http://www.oracle.com/XSL/Transform/java/oracle.tip.xref.xpath.XRefXPathFunctions"
-         xmlns:ldap="http://schemas.oracle.com/xpath/extension/ldap">
+         xmlns:ldap="http://schemas.oracle.com/xpath/extension/ldap"
+         xmlns:ns3="urn:medParticipants"
+         xmlns:ns4="http://xmlns.oracle.com/ias/pcbpel/NotificationService">
 
   <import namespace="http://xmlns.oracle.com/Marqtplaats/ParticipantService/ValidateEmailBPEL" location="ValidateEmailBPEL.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
   <!-- 
@@ -43,6 +45,12 @@
       with the client role are automatically set using WS-Addressing.
     -->
     <partnerLink name="validateemailbpel_client" partnerLinkType="client:ValidateEmailBPEL" myRole="ValidateEmailBPELProvider"/>
+    <partnerLink name="medParticipants.medParticipants"
+                 partnerLinkType="ns3:medParticipants.medParticipants"
+                 partnerRole="ParticipantsPort"/>
+    <partnerLink name="NotificationService1"
+                 partnerLinkType="ns4:NotificationServiceLink"
+                 partnerRole="NotificationServiceProvider"/>
   </partnerLinks>
 
   <!-- 
@@ -56,6 +64,7 @@
     <variable name="inputVariable" messageType="client:ValidateEmailBPELRequestMessage"/>
     <variable name="completeValidation"
               messageType="client:CompleteValidationBPELRequestMessage"/>
+    <variable name="emailAddress" messageType="ns3:LookupEmailAddresResponse"/>
   </variables>
   <correlationSets>
     <correlationSet name="csUUID" properties="ns2:UUID"/>
@@ -75,6 +84,100 @@
         <correlation set="csUUID" initiate="yes"/>
       </correlations>
     </receive>
+    <scope name="scLookupEmailAddress" exitOnStandardFault="no">
+      <variables>
+        <variable name="nickName" messageType="ns3:LookupEmailAddresRequest"/>
+      </variables>
+      <sequence name="Sequence1">
+        <assign name="assignNickName">
+          <copy>
+            <from>$inputVariable.payload/ns1:NickName</from>
+            <to>$nickName.payload</to>
+          </copy>
+        </assign>
+        <invoke name="invokeLookup"
+                partnerLink="medParticipants.medParticipants"
+                portType="ns3:ParticipantsPort" operation="lookupEmail"
+                inputVariable="nickName" outputVariable="emailAddress"
+                bpelx:invokeAsDetail="no"/>
+      </sequence>
+    </scope>
+    <scope name="sendValidationEmail" exitOnStandardFault="no">
+      <scope name="Email1">
+        <bpelx:annotation>
+          <bpelx:pattern patternName="bpelx:email"/>
+          <bpelx:general>
+            <bpelx:property name="userLabel">sendEmail</bpelx:property>
+          </bpelx:general>
+        </bpelx:annotation>
+        <variables>
+          <variable name="varNotificationReq"
+                    messageType="ns4:EmailNotificationRequest"/>
+          <variable name="varNotificationResponse"
+                    messageType="ns4:ArrayOfResponse"/>
+          <variable name="NotificationServiceFaultVariable"
+                    messageType="ns4:NotificationServiceErrorMessage"/>
+        </variables>
+        <sequence name="Sequence2">
+          <assign name="EmailParamsAssign">
+            <copy>
+              <from>string('Default')</from>
+              <to variable="varNotificationReq" part="EmailPayload">
+                <query>ns4:FromAccountName</query>
+              </to>
+            </copy>
+            <copy>
+              <from>string('')</from>
+              <to variable="varNotificationReq" part="EmailPayload">
+                <query>ns4:Bcc</query>
+              </to>
+            </copy>
+            <copy>
+              <from>string('')</from>
+              <to variable="varNotificationReq" part="EmailPayload">
+                <query>ns4:Cc</query>
+              </to>
+            </copy>
+            <copy>
+              <from>string('')</from>
+              <to variable="varNotificationReq" part="EmailPayload">
+                <query>ns4:ReplyToAddress</query>
+              </to>
+            </copy>
+            <copy>
+              <from>string('Please validate your e-mail address')</from>
+              <to variable="varNotificationReq" part="EmailPayload">
+                <query>ns4:Subject</query>
+              </to>
+            </copy>
+            <copy>
+              <from>$emailAddress.payload</from>
+              <to variable="varNotificationReq" part="EmailPayload">
+                <query>ns4:To</query>
+              </to>
+            </copy>
+            <copy>
+              <from>concat('The UUID of duty in your case will be: ', $inputVariable.payload/ns1:UUID)</from>
+              <to variable="varNotificationReq" part="EmailPayload">
+                <query>ns4:Content/ns4:ContentBody</query>
+              </to>
+            </copy>
+            <copy>
+              <from>string('text/html; charset=UTF-8')</from>
+              <to variable="varNotificationReq" part="EmailPayload">
+                <query>ns4:Content/ns4:MimeType</query>
+              </to>
+            </copy>
+          </assign>
+          <invoke name="InvokeNotificationService"
+                  portType="ns4:NotificationService"
+                  partnerLink="NotificationService1"
+                  inputVariable="varNotificationReq"
+                  outputVariable="varNotificationResponse"
+                  operation="sendEmailNotification"/>
+        </sequence>
+      </scope>
+    </scope>
     <pick name="Pick1">
       <onMessage variable="completeValidation"
                  partnerLink="validateemailbpel_client"

@@ -8,6 +8,7 @@
       <xsd:maxLength value="30"/>
     </xsd:restriction>
   </xsd:simpleType>
+  <xsd:element name="NickName" type="mqt:NickNameType"/>
   <xsd:simpleType name="PasswordType">
     <xsd:restriction base="xsd:string">
       <xsd:maxLength value="30"/>
@@ -18,6 +19,7 @@
       <xsd:maxLength value="250"/>
     </xsd:restriction>
   </xsd:simpleType>
+  <xsd:element name="EmailAddress" type="mqt:EmailAddressType"/>
   <xsd:simpleType name="IndicatorType">
     <xsd:restriction base="xsd:string">
       <xsd:enumeration value="Y"/>

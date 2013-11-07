@@ -12,4 +12,8 @@
              ui:wsdlLocation="participantUpsertService.wsdl">
     <interface.wsdl interface="http://xmlns.oracle.com/pcbpel/adapter/db/Marqtplaats/ParticipantService/participantUpsertService#wsdl.interface(participantUpsertService_ptt)"/>
   </reference>
+  <reference name="EmailLookupService"
+             ui:wsdlLocation="EmailLookupService.wsdl">
+    <interface.wsdl interface="http://xmlns.oracle.com/pcbpel/adapter/db/Marqtplaats/ParticipantService/EmailLookupService#wsdl.interface(EmailLookupService_ptt)"/>
+  </reference>
 </componentType>

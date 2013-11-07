@@ -19,6 +19,12 @@
   <message name="StatusMessage">
     <part name="payload" element="xqcm:StatusResponse"/>
   </message>
+  <message name="LookupEmailAddresRequest">
+    <part name="payload" element="xqcm:NickName"/>
+  </message>  
+  <message name="LookupEmailAddresResponse">
+      <part name="payload" element="xqcm:EmailAddress"/>
+  </message>
   <portType name="ParticipantsPort">
     <documentation>
       Abstract WSDL, just defining the interface (operations plus message
@@ -27,6 +33,10 @@
     <operation name="insert">
       <input message="tns:ParticipantMessage"/>
       <output message="tns:StatusMessage"/>
+    </operation>
+    <operation name="lookupEmail">
+      <input message="tns:LookupEmailAddresRequest"/>
+      <output message="tns:LookupEmailAddresResponse"/>
     </operation>
   </portType>
 </definitions>

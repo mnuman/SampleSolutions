@@ -24,4 +24,28 @@
          </case>
       </switch>
    </operation>
+   <operation name="lookupEmail" deliveryPolicy="AllOrNothing" priority="4"
+              validateSchema="false">
+      <switch>
+         <case executionType="direct"
+               name="EmailLookupService.selectByPrimaryKey">
+            <action>
+               <transform>
+                  <part name="$out.selectByPrimaryKey_inputParameters"
+                        function="xslt(xsl/NickName_To_ParticipantsPrimaryKey.xsl, $in.payload)"/>
+               </transform>
+               <invoke reference="EmailLookupService"
+                       operation="selectByPrimaryKey">
+                  <onReply>
+                     <transform>
+                        <part name="$out.payload"
+                              function="xslt(xsl/ParticipantsCollection_To_EmailAddress.xsl, $in.ParticipantsCollection)"/>
+                     </transform>
+                     <reply/>
+                  </onReply>
+               </invoke>
+            </action>
+         </case>
+      </switch>
+   </operation>
 </Mediator>

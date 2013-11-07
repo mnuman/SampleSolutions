@@ -23,6 +23,12 @@
           location="BPELUpserter.wsdl" importType="wsdl"/>
   <import namespace="urn:medParticipants"
           location="abstractParticipantsWrapper.wsdl" importType="wsdl"/>
+  <import namespace="http://xmlns.oracle.com/pcbpel/adapter/db/Marqtplaats/ParticipantService/EmailLookupService"
+          location="EmailLookupService.wsdl" importType="wsdl"/>
+  <import namespace="urn:medParticipants"
+          location="abstractParticipantsWrapper1.wsdl" importType="wsdl"/>
+  <import namespace="http://xmlns.oracle.com/ias/pcbpel/NotificationService"
+          location="NotificationService.wsdl" importType="wsdl"/>
   <service name="medEmailValidator_ep" ui:wsdlLocation="ValidateEmailBPEL.wsdl">
     <interface.wsdl interface="http://xmlns.oracle.com/Marqtplaats/ParticipantService/ValidateEmailBPEL#wsdl.interface(ValidateEmailBPEL)"/>
     <binding.ws port="http://xmlns.oracle.com/Marqtplaats/ParticipantService/ValidateEmailBPEL#wsdl.endpoint(medEmailValidator_ep/ValidateEmailBPEL_pt)"/>
@@ -71,6 +77,24 @@
     <property name="jca.retry.maxInterval" type="xs:string" many="false"
               override="may">120</property>
   </reference>
+  <reference name="EmailLookupService"
+             ui:wsdlLocation="EmailLookupService.wsdl">
+    <interface.wsdl interface="http://xmlns.oracle.com/pcbpel/adapter/db/Marqtplaats/ParticipantService/EmailLookupService#wsdl.interface(EmailLookupService_ptt)"/>
+    <binding.jca config="EmailLookupService_db.jca"/>
+    <property name="jca.retry.count" type="xs:int" many="false" override="may">4</property>
+    <property name="jca.retry.interval" type="xs:int" many="false"
+              override="may">1</property>
+    <property name="jca.retry.backoff" type="xs:int" many="false"
+              override="may">2</property>
+    <property name="jca.retry.maxInterval" type="xs:string" many="false"
+              override="may">120</property>
+  </reference>
+  <reference name="NotificationService1"
+             ui:wsdlLocation="NotificationService.wsdl">
+    <interface.wsdl interface="http://xmlns.oracle.com/ias/pcbpel/NotificationService#wsdl.interface(NotificationService)"/>
+    <binding.wsif port="http://xmlns.oracle.com/ias/pcbpel/NotificationService#wsdl.endpoint(NotificationService/JavaPort)"
+                  location="NotificationService.wsdl"/>
+  </reference>
   <wire>
     <source.uri>medParticipants/participantUpsertService</source.uri>
     <target.uri>participantUpsertService</target.uri>
@@ -102,5 +126,17 @@
   <wire>
     <source.uri>BPELUpserter/medEmailValidator.medEmailValidator</source.uri>
     <target.uri>medEmailValidator/medEmailValidator</target.uri>
+  </wire>
+  <wire>
+    <source.uri>medParticipants/EmailLookupService</source.uri>
+    <target.uri>EmailLookupService</target.uri>
+  </wire>
+  <wire>
+    <source.uri>ValidateEmailBPEL/medParticipants.medParticipants</source.uri>
+    <target.uri>medParticipants/medParticipants</target.uri>
+  </wire>
+  <wire>
+    <source.uri>ValidateEmailBPEL/NotificationService1</source.uri>
+    <target.uri>NotificationService1</target.uri>
   </wire>
 </composite>
