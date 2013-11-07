@@ -8,6 +8,7 @@
       <xsd:maxLength value="30"/>
     </xsd:restriction>
   </xsd:simpleType>
+  <xsd:element name="IsSeller" type="xsd:boolean"/>
   <xsd:element name="NickName" type="mqt:NickNameType"/>
   <xsd:simpleType name="PasswordType">
     <xsd:restriction base="xsd:string">

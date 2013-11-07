@@ -76,4 +76,28 @@
          </case>
       </switch>
    </operation>
+   <operation name="participantIsSeller" deliveryPolicy="AllOrNothing"
+              priority="4" validateSchema="false">
+      <switch>
+         <case executionType="direct"
+               name="ParticipantIsSeller.selectByPrimaryKey">
+            <action>
+               <transform>
+                  <part name="$out.selectByPrimaryKey_inputParameters"
+                        function="xslt(xsl/NickName_To_ParticipantsPrimaryKey_2.xsl, $in.payload)"/>
+               </transform>
+               <invoke reference="ParticipantIsSeller"
+                       operation="selectByPrimaryKey">
+                  <onReply>
+                     <transform>
+                        <part name="$out.payload"
+                              function="xslt(xsl/ParticipantsCollection_To_IsSeller.xsl, $in.ParticipantsCollection)"/>
+                     </transform>
+                     <reply/>
+                  </onReply>
+               </invoke>
+            </action>
+         </case>
+      </switch>
+   </operation>
 </Mediator>

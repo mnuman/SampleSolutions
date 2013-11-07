@@ -25,6 +25,9 @@
   <message name="ParticipantIdentification">
     <part name="payload" element="xqcm:NickName"/>
   </message>  
+  <message name="ParticipantIsSeller">
+      <part name="payload" element="xqcm:IsSeller"/>
+  </message>
   <message name="LookupEmailAddresResponse">
       <part name="payload" element="xqcm:EmailAddress"/>
   </message>
@@ -40,6 +43,10 @@
     <operation name="lookupEmail">
       <input message="tns:LookupEmailAddresRequest"/>
       <output message="tns:LookupEmailAddresResponse"/>
+    </operation>
+    <operation name="participantIsSeller">
+      <input message="tns:ParticipantIdentification"/>
+      <output message="tns:ParticipantIsSeller"/>
     </operation>
     <operation name="lockParticipant">
     <input message="tns:ParticipantIdentification"/>

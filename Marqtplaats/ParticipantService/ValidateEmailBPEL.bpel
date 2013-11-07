@@ -199,7 +199,7 @@ Please cut and paste this link into the address bar of your web browser to compl
         </scope>
       </sequence>
     </scope>
-    <pick name="Pick1">
+    <pick name="waitForValidation">
       <onMessage variable="completeValidation"
                  partnerLink="validateemailbpel_client"
                  portType="client:ValidateEmailBPEL" operation="complete">
@@ -213,11 +213,42 @@ Please cut and paste this link into the address bar of your web browser to compl
               <to>$validatedNickname.payload</to>
             </copy>
           </assign>
-          <invoke name="invokeValidator"
-                  partnerLink="medParticipants.medParticipants"
-                  portType="ns3:ParticipantsPort"
-                  operation="makeParticipantValidated"
-                  inputVariable="validatedNickname" bpelx:invokeAsDetail="no"/>
+          <scope name="IsSeller" exitOnStandardFault="no">
+            <variables>
+              <variable name="IsASeller" messageType="ns3:ParticipantIsSeller"/>
+            </variables>
+            <sequence name="Sequence6">
+              <invoke name="checkIfSeller"
+                      partnerLink="medParticipants.medParticipants"
+                      portType="ns3:ParticipantsPort"
+                      operation="participantIsSeller"
+                      inputVariable="validatedNickname" outputVariable="IsASeller"
+                      bpelx:invokeAsDetail="no"/>
+              <if name="IsASeller">
+                <documentation>IsSeller</documentation>
+                <condition>$IsASeller.payload</condition>
+                <sequence>
+                  <empty name="needHumanWorkflowHere"/>
+                  <invoke name="validateSeller"
+                          partnerLink="medParticipants.medParticipants"
+                          portType="ns3:ParticipantsPort"
+                          operation="makeParticipantValidated"
+                          inputVariable="validatedNickname"
+                          bpelx:invokeAsDetail="no"/>
+                </sequence>
+                <else>
+                  <documentation>NoSeller</documentation><invoke name="validateNonSeller"
+                                                                 partnerLink="medParticipants.medParticipants"
+                                                                 portType="ns3:ParticipantsPort"
+                                                                 operation="makeParticipantValidated"
+                                                                 inputVariable="validatedNickname"
+                                                                 bpelx:invokeAsDetail="no"
+                                                                 xmlns:bpelx="http://schemas.oracle.com/bpel/extension"
+                                                                 xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable"/>
+                </else>
+              </if>
+            </sequence>
+          </scope>
         </sequence>
       </onMessage>
       <onAlarm>

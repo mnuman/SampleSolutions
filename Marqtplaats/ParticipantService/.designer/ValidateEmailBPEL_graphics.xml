@@ -5,10 +5,10 @@
    <iconize/>
    <partnerlink_locations>
       <partnerlink name="validateemailbpel_client" x="3" y="90" side="left"/>
-      <partnerlink name="medParticipants.medParticipants" x="1196" y="397" side="right"/>
-      <partnerlink name="NotificationService1" x="1196" y="18" side="right"/>
+      <partnerlink name="medParticipants.medParticipants" x="959" y="611" side="right"/>
+      <partnerlink name="NotificationService1" x="959" y="18" side="right"/>
    </partnerlink_locations>
-   <graph_layout viewport="0,281,1329,537" show_swimlanes="true">
+   <graph_layout viewport="136,532,649,275" show_swimlanes="true">
       <layout_item collapsed="false" xpath="/process" type="process" showhandlers="true"/>
       <layout_item collapsed="false" xpath="/process/sequence" type="sequence"/>
       <layout_item collapsed="true" xpath="/process/sequence/scope[1]" type="scope" showhandlers="true"/>
@@ -20,6 +20,9 @@
       <layout_item collapsed="false" xpath="/process/sequence/pick" type="pick"/>
       <layout_item collapsed="false" xpath="/process/sequence/pick/onMessage" type="onMessage"/>
       <layout_item collapsed="false" xpath="/process/sequence/pick/onMessage/sequence" type="sequence"/>
+      <layout_item collapsed="false" xpath="/process/sequence/pick/onMessage/sequence/scope" type="scope" showhandlers="true"/>
+      <layout_item collapsed="false" xpath="/process/sequence/pick/onMessage/sequence/scope/sequence" type="sequence"/>
+      <layout_item collapsed="false" xpath="/process/sequence/pick/onMessage/sequence/scope/sequence/if/sequence" type="sequence"/>
       <layout_item collapsed="false" xpath="/process/sequence/pick/onAlarm" type="onAlarmPick"/>
       <layout_item collapsed="false" xpath="/process/sequence/pick/onAlarm/sequence" type="sequence"/>
    </graph_layout>

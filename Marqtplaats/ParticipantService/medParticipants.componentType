@@ -23,4 +23,8 @@
   <reference name="LockParticipant" ui:wsdlLocation="LockParticipant.wsdl">
     <interface.wsdl interface="http://xmlns.oracle.com/pcbpel/adapter/db/Marqtplaats/ParticipantService/LockParticipant#wsdl.interface(LockParticipant_ptt)"/>
   </reference>
+  <reference name="ParticipantIsSeller"
+             ui:wsdlLocation="ParticipantIsSeller.wsdl">
+    <interface.wsdl interface="http://xmlns.oracle.com/pcbpel/adapter/db/Marqtplaats/ParticipantService/ParticipantIsSeller#wsdl.interface(ParticipantIsSeller_ptt)"/>
+  </reference>
 </componentType>
