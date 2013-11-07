@@ -54,6 +54,8 @@
               many="false">async.persist</property>
     <property name="bpel.preference.customTimeout" type="xs:string"
               many="false">PT1H</property>
+    <property name="bpel.preference.verificationURLPrefix" type="xs:string"
+              many="false">http://soabpm-vm:7001/soa-infra/services/default/ParticipantService/httpCompleter?operationName=doComplete&amp;aUUID=</property>
   </component>
   <component name="medEmailValidator">
     <implementation.mediator src="medEmailValidator.mplan"/>

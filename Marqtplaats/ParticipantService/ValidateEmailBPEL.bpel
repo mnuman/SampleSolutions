@@ -29,7 +29,8 @@
          xmlns:xref="http://www.oracle.com/XSL/Transform/java/oracle.tip.xref.xpath.XRefXPathFunctions"
          xmlns:ldap="http://schemas.oracle.com/xpath/extension/ldap"
          xmlns:ns3="urn:medParticipants"
-         xmlns:ns4="http://xmlns.oracle.com/ias/pcbpel/NotificationService">
+         xmlns:ns4="http://xmlns.oracle.com/ias/pcbpel/NotificationService"
+         xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 
   <import namespace="http://xmlns.oracle.com/Marqtplaats/ParticipantService/ValidateEmailBPEL" location="ValidateEmailBPEL.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
   <!-- 
@@ -103,80 +104,96 @@
       </sequence>
     </scope>
     <scope name="sendValidationEmail" exitOnStandardFault="no">
-      <scope name="Email1">
-        <bpelx:annotation>
-          <bpelx:pattern patternName="bpelx:email"/>
-          <bpelx:general>
-            <bpelx:property name="userLabel">sendEmail</bpelx:property>
-          </bpelx:general>
-        </bpelx:annotation>
-        <variables>
-          <variable name="varNotificationReq"
-                    messageType="ns4:EmailNotificationRequest"/>
-          <variable name="varNotificationResponse"
-                    messageType="ns4:ArrayOfResponse"/>
-          <variable name="NotificationServiceFaultVariable"
-                    messageType="ns4:NotificationServiceErrorMessage"/>
-        </variables>
-        <sequence name="Sequence2">
-          <assign name="EmailParamsAssign">
-            <copy>
-              <from>string('Default')</from>
-              <to variable="varNotificationReq" part="EmailPayload">
-                <query>ns4:FromAccountName</query>
-              </to>
-            </copy>
-            <copy>
-              <from>string('')</from>
-              <to variable="varNotificationReq" part="EmailPayload">
-                <query>ns4:Bcc</query>
-              </to>
-            </copy>
-            <copy>
-              <from>string('')</from>
-              <to variable="varNotificationReq" part="EmailPayload">
-                <query>ns4:Cc</query>
-              </to>
-            </copy>
-            <copy>
-              <from>string('')</from>
-              <to variable="varNotificationReq" part="EmailPayload">
-                <query>ns4:ReplyToAddress</query>
-              </to>
-            </copy>
-            <copy>
-              <from>string('Please validate your e-mail address')</from>
-              <to variable="varNotificationReq" part="EmailPayload">
-                <query>ns4:Subject</query>
-              </to>
-            </copy>
-            <copy>
-              <from>$emailAddress.payload</from>
-              <to variable="varNotificationReq" part="EmailPayload">
-                <query>ns4:To</query>
-              </to>
-            </copy>
-            <copy>
-              <from>concat('The UUID of duty in your case will be: ', $inputVariable.payload/ns1:UUID)</from>
-              <to variable="varNotificationReq" part="EmailPayload">
-                <query>ns4:Content/ns4:ContentBody</query>
-              </to>
-            </copy>
-            <copy>
-              <from>string('text/html; charset=UTF-8')</from>
-              <to variable="varNotificationReq" part="EmailPayload">
-                <query>ns4:Content/ns4:MimeType</query>
-              </to>
-            </copy>
-          </assign>
-          <invoke name="InvokeNotificationService"
-                  portType="ns4:NotificationService"
-                  partnerLink="NotificationService1"
-                  inputVariable="varNotificationReq"
-                  outputVariable="varNotificationResponse"
-                  operation="sendEmailNotification"/>
-        </sequence>
-      </scope>
+      <variables>
+        <variable name="completeVerificationURL" type="xsd:string">
+          <documentation>This is the complete verifcation URL; if you invoke this, it will cause a message 
+to be sent to the waiting BPEL process causing it to continue.</documentation>
+        </variable>
+      </variables>
+      <sequence name="Sequence3">
+        <assign name="prepareURL">
+          <copy>
+            <from>concat(ora:getPreference("verificationURLPrefix"), $inputVariable.payload/ns1:UUID)</from>
+            <to>$completeVerificationURL</to>
+          </copy>
+        </assign>
+        <scope name="Email1">
+          <bpelx:annotation>
+            <bpelx:pattern patternName="bpelx:email"/>
+            <bpelx:general>
+              <bpelx:property name="userLabel">sendEmail</bpelx:property>
+            </bpelx:general>
+          </bpelx:annotation>
+          <variables>
+            <variable name="varNotificationReq"
+                      messageType="ns4:EmailNotificationRequest"/>
+            <variable name="varNotificationResponse"
+                      messageType="ns4:ArrayOfResponse"/>
+            <variable name="NotificationServiceFaultVariable"
+                      messageType="ns4:NotificationServiceErrorMessage"/>
+          </variables>
+          <sequence name="Sequence2">
+            <assign name="EmailParamsAssign">
+              <copy>
+                <from>string('Default')</from>
+                <to variable="varNotificationReq" part="EmailPayload">
+                  <query>ns4:FromAccountName</query>
+                </to>
+              </copy>
+              <copy>
+                <from>string('')</from>
+                <to variable="varNotificationReq" part="EmailPayload">
+                  <query>ns4:Bcc</query>
+                </to>
+              </copy>
+              <copy>
+                <from>string('')</from>
+                <to variable="varNotificationReq" part="EmailPayload">
+                  <query>ns4:Cc</query>
+                </to>
+              </copy>
+              <copy>
+                <from>string('')</from>
+                <to variable="varNotificationReq" part="EmailPayload">
+                  <query>ns4:ReplyToAddress</query>
+                </to>
+              </copy>
+              <copy>
+                <from>string('Please validate your e-mail address')</from>
+                <to variable="varNotificationReq" part="EmailPayload">
+                  <query>ns4:Subject</query>
+                </to>
+              </copy>
+              <copy>
+                <from>$emailAddress.payload</from>
+                <to variable="varNotificationReq" part="EmailPayload">
+                  <query>ns4:To</query>
+                </to>
+              </copy>
+              <copy>
+                <from>concat('You have 1 hour to verify your e-mail address by clicking the following link: ', $completeVerificationURL, string('
+
+Please cut and paste this link into the address bar of your web browser to complete the registration process'))</from>
+                <to variable="varNotificationReq" part="EmailPayload">
+                  <query>ns4:Content/ns4:ContentBody</query>
+                </to>
+              </copy>
+              <copy>
+                <from>string('text/html; charset=UTF-8')</from>
+                <to variable="varNotificationReq" part="EmailPayload">
+                  <query>ns4:Content/ns4:MimeType</query>
+                </to>
+              </copy>
+            </assign>
+            <invoke name="InvokeNotificationService"
+                    portType="ns4:NotificationService"
+                    partnerLink="NotificationService1"
+                    inputVariable="varNotificationReq"
+                    outputVariable="varNotificationResponse"
+                    operation="sendEmailNotification"/>
+          </sequence>
+        </scope>
+      </sequence>
     </scope>
     <pick name="Pick1">
       <onMessage variable="completeValidation"
