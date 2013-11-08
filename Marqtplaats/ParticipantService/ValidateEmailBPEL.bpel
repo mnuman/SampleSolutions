@@ -30,7 +30,10 @@
          xmlns:ldap="http://schemas.oracle.com/xpath/extension/ldap"
          xmlns:ns3="urn:medParticipants"
          xmlns:ns4="http://xmlns.oracle.com/ias/pcbpel/NotificationService"
-         xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+         xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+         xmlns:task="http://xmlns.oracle.com/bpel/workflow/task"
+         xmlns:taskservice="http://xmlns.oracle.com/bpel/workflow/taskService"
+         xmlns:wfcommon="http://xmlns.oracle.com/bpel/workflow/common">
 
   <import namespace="http://xmlns.oracle.com/Marqtplaats/ParticipantService/ValidateEmailBPEL" location="ValidateEmailBPEL.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
   <!-- 
@@ -52,6 +55,10 @@
     <partnerLink name="NotificationService1"
                  partnerLinkType="ns4:NotificationServiceLink"
                  partnerRole="NotificationServiceProvider"/>
+    <partnerLink name="SellerApproval.TaskService_1"
+                 partnerLinkType="taskservice:TaskService"
+                 partnerRole="TaskService"
+                 myRole="TaskServiceCallbackListener"/>
   </partnerLinks>
 
   <!-- 
@@ -70,6 +77,8 @@
               messageType="ns3:ParticipantIdentification"/>
     <variable name="lockerNickname"
               messageType="ns3:ParticipantIdentification"/>
+    <variable name="SellerApproval1_globalVariable"
+              messageType="taskservice:taskMessage"/>
   </variables>
   <correlationSets>
     <correlationSet name="csUUID" properties="ns2:UUID"/>
@@ -228,7 +237,121 @@ Please cut and paste this link into the address bar of your web browser to compl
                 <documentation>IsSeller</documentation>
                 <condition>$IsASeller.payload</condition>
                 <sequence>
-                  <empty name="needHumanWorkflowHere"/>
+                  <scope name="SellerApproval1"
+                         xmlns:wf="http://schemas.oracle.com/bpel/extensions/workflow"
+                         wf:key="SellerApproval1_globalVariable">
+                    <bpelx:annotation>
+                      <bpelx:pattern patternName="bpelx:workflow"/>
+                    </bpelx:annotation>
+                    <variables>
+                      <variable name="initiateTaskInput"
+                                messageType="taskservice:initiateTaskMessage"/>
+                      <variable name="initiateTaskResponseMessage"
+                                messageType="taskservice:initiateTaskResponseMessage"/>
+                    </variables>
+                    <sequence>
+                      <assign name="SellerApproval1_AssignTaskAttributes">
+                        <copy>
+                          <from>number(3)</from>
+                          <to variable="initiateTaskInput" part="payload">
+                            <query>task:task/task:priority</query>
+                          </to>
+                        </copy>
+                        <copy>
+                          <from>number(3)</from>
+                          <to variable="initiateTaskInput" part="payload">
+                            <query>task:task/task:priority</query>
+                          </to>
+                        </copy>
+                        <copy>
+                          <from>number(3)</from>
+                          <to variable="initiateTaskInput" part="payload">
+                            <query>task:task/task:priority</query>
+                          </to>
+                        </copy>
+                        <copy>
+                          <from>number(3)</from>
+                          <to variable="initiateTaskInput" part="payload">
+                            <query>task:task/task:priority</query>
+                          </to>
+                        </copy>
+                        <copy>
+                          <from><literal><payload xmlns="http://xmlns.oracle.com/bpel/workflow/task">
+ <SellerNickName xmlns="http://xmlns.oracle.com/bpel/workflow/task"/>
+ <SellerEmailAddress xmlns="http://xmlns.oracle.com/bpel/workflow/task"/>
+</payload></literal></from>
+                          <to variable="initiateTaskInput" part="payload">
+                            <query>task:task/task:payload</query>
+                          </to>
+                        </copy>
+                        <copy>
+                          <from variable="inputVariable" part="payload"><query>ns1:NickName</query></from>
+                          <to variable="initiateTaskInput" part="payload">
+                            <query>task:task/task:payload/task:SellerNickName</query>
+                          </to>
+                        </copy>
+                        <copy>
+                          <from variable="emailAddress" part="payload"/>
+                          <to variable="initiateTaskInput" part="payload">
+                            <query>task:task/task:payload/task:SellerEmailAddress</query>
+                          </to>
+                        </copy>
+                      </assign>
+                      <invoke name="initiateTask_SellerApproval1"
+                              partnerLink="SellerApproval.TaskService_1"
+                              operation="initiateTask"
+                              portType="taskservice:TaskService"
+                              inputVariable="initiateTaskInput"
+                              outputVariable="initiateTaskResponseMessage"/>
+                      <receive name="receiveCompletedTask_SellerApproval1"
+                               partnerLink="SellerApproval.TaskService_1"
+                               portType="taskservice:TaskServiceCallback"
+                               operation="onTaskCompleted"
+                               variable="SellerApproval1_globalVariable"
+                               createInstance="no"/>
+                    </sequence>
+                  </scope>
+                  <if name="taskIf">
+                    <documentation>Task outcome is APPROVE</documentation>
+                    <bpelx:annotation>
+                      <bpelx:pattern patternName="Task outcome is APPROVE"/>
+                    </bpelx:annotation>
+                    <condition>$SellerApproval1_globalVariable.payload/task:systemAttributes/task:outcome = 'APPROVE'</condition>
+                    <sequence><invoke name="validateSeller"
+                                       partnerLink="medParticipants.medParticipants"
+                                       portType="ns3:ParticipantsPort"
+                                       operation="makeParticipantValidated"
+                                       inputVariable="validatedNickname"
+                                       bpelx:invokeAsDetail="no"
+                                       xmlns:bpelx="http://schemas.oracle.com/bpel/extension"
+                                       xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable"/></sequence>
+                    <elseif>
+                      <documentation>Task outcome is REJECT</documentation>
+                      <bpelx:annotation>
+                        <bpelx:pattern patternName="Task outcome is REJECT"/>
+                      </bpelx:annotation>
+                      <condition>$SellerApproval1_globalVariable.payload/task:systemAttributes/task:outcome = 'REJECT'</condition>
+                      <sequence><assign name="setLockerNickname"
+                                         xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable">
+      <copy>
+         <from>$inputVariable.payload/ns1:NickName</from>
+         <to>$lockerNickname.payload</to>
+      </copy>
+   </assign><invoke name="invokeLocker"
+                                         partnerLink="medParticipants.medParticipants"
+                                         portType="ns3:ParticipantsPort"
+                                         operation="lockParticipant"
+                                         inputVariable="lockerNickname"
+                                         xmlns:bpelx="http://schemas.oracle.com/bpel/extension"
+                                         xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable"
+                    bpelx:invokeAsDetail="no"/></sequence>
+                    </elseif>
+                    <else>
+                      <sequence>
+                        <empty name="noOperation"/>
+                      </sequence>
+                    </else>
+                  </if>
                   <invoke name="validateSeller"
                           partnerLink="medParticipants.medParticipants"
                           portType="ns3:ParticipantsPort"

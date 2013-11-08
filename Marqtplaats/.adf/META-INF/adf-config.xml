@@ -22,24 +22,24 @@
     <mds-config xmlns="http://xmlns.oracle.com/mds/config">
       <persistence-config>
         <metadata-namespaces>
-          <namespace metadata-store-usage="mstore-usage_1" path="/soa/shared"/>
-          <namespace metadata-store-usage="runtime_mds" path="/apps"/>
+          <namespace path="/apps" metadata-store-usage="runtime_mds"/>
+          <namespace path="/soa/shared" metadata-store-usage="mstore-usage_1"/>
         </metadata-namespaces>
         <metadata-store-usages>
           <metadata-store-usage id="runtime_mds">
             <metadata-store class-name="oracle.mds.persistence.stores.db.DBMetadataStore">
-              <property value="dev_mds" name="jdbc-userid"/>
-              <property value="welcome1" name="jdbc-password"/>
-              <property value="jdbc:oracle:thin:@localhost:1521:XE"
-                        name="jdbc-url"/>
-              <property value="soa-infra" name="partition-name"/>
+              <property name="jdbc-userid" value="dev_mds"/>
+              <property name="jdbc-password" value="welcome1"/>
+              <property name="jdbc-url"
+                        value="jdbc:oracle:thin:@localhost:1521:XE"/>
+              <property name="partition-name" value="soa-infra"/>
             </metadata-store>
           </metadata-store-usage>
           <metadata-store-usage id="mstore-usage_1">
             <metadata-store class-name="oracle.mds.persistence.stores.file.FileMetadataStore">
-              <property value="${oracle.home}/integration"
-                        name="metadata-path"/>
-              <property value="seed" name="partition-name"/>
+              <property name="metadata-path"
+                        value="${oracle.home}/integration"/>
+              <property name="partition-name" value="seed"/>
             </metadata-store>
           </metadata-store-usage>
         </metadata-store-usages>

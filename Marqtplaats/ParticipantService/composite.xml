@@ -35,6 +35,9 @@
           location="ParticipantValidated.wsdl" importType="wsdl"/>
   <import namespace="http://xmlns.oracle.com/pcbpel/adapter/db/Marqtplaats/ParticipantService/ParticipantIsSeller"
           location="ParticipantIsSeller.wsdl" importType="wsdl"/>
+  <import namespace="http://xmlns.oracle.com/bpel/workflow/taskService"
+          location="oramds:/soa/shared/workflow/TaskServiceInterface.wsdl"
+          importType="wsdl"/>
   <service name="medEmailValidator_ep" ui:wsdlLocation="ValidateEmailBPEL.wsdl">
     <interface.wsdl interface="http://xmlns.oracle.com/Marqtplaats/ParticipantService/ValidateEmailBPEL#wsdl.interface(ValidateEmailBPEL)"/>
     <binding.ws port="http://xmlns.oracle.com/Marqtplaats/ParticipantService/ValidateEmailBPEL#wsdl.endpoint(medEmailValidator_ep/ValidateEmailBPEL_pt)"/>
@@ -72,6 +75,9 @@
   <component name="BPELUpserter" version="2.0">
     <implementation.bpel src="BPELUpserter.bpel"/>
     <property name="bpel.config.transaction" type="xs:string" many="false">required</property>
+  </component>
+  <component name="SellerApproval">
+    <implementation.workflow src="SellerApproval.task"/>
   </component>
   <reference name="participantUpsertService"
              ui:wsdlLocation="participantUpsertService.wsdl">
@@ -193,5 +199,9 @@
   <wire>
     <source.uri>medParticipants/ParticipantIsSeller</source.uri>
     <target.uri>ParticipantIsSeller</target.uri>
+  </wire>
+  <wire>
+    <source.uri>ValidateEmailBPEL/SellerApproval.TaskService_1</source.uri>
+    <target.uri>SellerApproval/TaskService</target.uri>
   </wire>
 </composite>
