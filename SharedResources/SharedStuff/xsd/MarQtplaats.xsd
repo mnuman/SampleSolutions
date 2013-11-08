@@ -82,4 +82,30 @@
       </xsd:sequence>
     </xsd:complexType>
   </xsd:element>
+  <xsd:simpleType name="AuctionStatusType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="NOT_STARTED"/>
+      <xsd:enumeration value="ACTIVE"/>
+      <xsd:enumeration value="FINISHED"/>
+      <xsd:enumeration value="CANCELLED"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType name="AuctionRegistrationRequestType">
+    <xsd:sequence>
+      <xsd:element name="Description" type="xsd:string"/>
+      <xsd:element name="StartingPrice" type="xsd:decimal" minOccurs="0"
+                   maxOccurs="1"/>
+      <xsd:element name="MinimumIncrement" type="xsd:decimal" maxOccurs="1"
+                   minOccurs="0"/>
+      <xsd:element name="InformPrice" type="xsd:decimal" maxOccurs="1"
+                   minOccurs="0"/>
+      <xsd:element name="AuctionStatus" type="mqt:AuctionStatusType"
+                   default="NOT_STARTED" maxOccurs="1" minOccurs="1"/>
+      <xsd:element name="StartDate" type="xsd:date"/>
+      <xsd:element name="EndDate" maxOccurs="1" minOccurs="0"/>
+      <xsd:element name="Seller" type="mqt:NickNameType"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="AuctionRegistrationRequest"
+               type="mqt:AuctionRegistrationRequestType"/>
 </xsd:schema>

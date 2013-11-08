@@ -1,0 +1,44 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+   <entry key="root_descriptor_alias">AUCTION</entry>
+   <entry key="AUCTION.STARTDATE:db_column_type">DATE</entry>
+   <entry key="AUCTION.INFORM_PRICE:db_column_type">NUMBER</entry>
+   <entry key="AUCTION.STATUS:db_column_not_null">true</entry>
+   <entry key="AUCTION:db_column_8">SELLER</entry>
+   <entry key="AUCTION:db_table_type">TABLE</entry>
+   <entry key="AUCTION:db_column_7">ENDDATE</entry>
+   <entry key="AUCTION:db_column_6">STARTDATE</entry>
+   <entry key="AUCTION:db_column_5">STATUS</entry>
+   <entry key="AUCTION.DESCRIPTION:db_column_not_null">true</entry>
+   <entry key="AUCTION:db_column_4">INFORM_PRICE</entry>
+   <entry key="AUCTION:db_column_3">MIN_INCREMENT</entry>
+   <entry key="AUCTION:db_column_2">STARTING_PRICE</entry>
+   <entry key="AUCTION:db_column_1">DESCRIPTION</entry>
+   <entry key="AUCTION:db_column_0">ID</entry>
+   <entry key="AUCTION.STARTDATE:db_column_not_null">true</entry>
+   <entry key="AUCTION.SELLER:db_column_not_null">true</entry>
+   <entry key="AUCTION.INFORM_PRICE:db_column_scale">2</entry>
+   <entry key="AUCTION.ID:db_column_precision">22</entry>
+   <entry key="AUCTION.SELLER:db_column_type">VARCHAR2</entry>
+   <entry key="AUCTION.INFORM_PRICE:db_column_not_null">false</entry>
+   <entry key="AUCTION.ID:db_column_type">NUMBER</entry>
+   <entry key="AUCTION.MIN_INCREMENT:db_column_scale">2</entry>
+   <entry key="AUCTION.STARTING_PRICE:db_column_scale">2</entry>
+   <entry key="AUCTION.DESCRIPTION:db_column_type">VARCHAR2</entry>
+   <entry key="AUCTION.STATUS:db_column_type">VARCHAR2</entry>
+   <entry key="AUCTION.ENDDATE:db_column_not_null">false</entry>
+   <entry key="AUCTION.SELLER:db_column_size">30</entry>
+   <entry key="AUCTION.MIN_INCREMENT:db_column_type">NUMBER</entry>
+   <entry key="AUCTION.DESCRIPTION:db_column_size">250</entry>
+   <entry key="AUCTION.STATUS:db_column_size">30</entry>
+   <entry key="AUCTION.ENDDATE:db_column_type">DATE</entry>
+   <entry key="AUCTION.INFORM_PRICE:db_column_precision">15</entry>
+   <entry key="AUCTION.ID:db_column_scale">0</entry>
+   <entry key="AUCTION.STARTING_PRICE:db_column_not_null">false</entry>
+   <entry key="AUCTION.MIN_INCREMENT:db_column_not_null">false</entry>
+   <entry key="AUCTION.STARTING_PRICE:db_column_type">NUMBER</entry>
+   <entry key="AUCTION.ID:db_column_not_null">true</entry>
+   <entry key="AUCTION.MIN_INCREMENT:db_column_precision">15</entry>
+   <entry key="AUCTION.STARTING_PRICE:db_column_precision">15</entry>
+</properties>
