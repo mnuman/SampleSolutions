@@ -24,4 +24,18 @@
          </case>
       </switch>
    </operation>
+   <operation name="storeBid" deliveryPolicy="AllOrNothing" priority="4"
+              validateSchema="false">
+      <switch>
+         <case executionType="direct" name="StoreBid.insert">
+            <action>
+               <transform>
+                  <part name="$out.AuctionBidsCollection"
+                        function="xslt(xsl/storeBid.xsl, $in.in)"/>
+               </transform>
+               <invoke reference="StoreBid" operation="insert"/>
+            </action>
+         </case>
+      </switch>
+   </operation>
 </Mediator>

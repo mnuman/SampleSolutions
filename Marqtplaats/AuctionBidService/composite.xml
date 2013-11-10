@@ -24,6 +24,8 @@
           importType="wsdl"/>
   <import namespace="urn:abstractAuction"
           location="AuctionDetailsServiceWrapper.wsdl" importType="wsdl"/>
+  <import namespace="http://xmlns.oracle.com/pcbpel/adapter/db/Marqtplaats/AuctionBidService/StoreBid"
+          location="StoreBid.wsdl" importType="wsdl"/>
   <service name="medAuctionBids_ep"
            ui:wsdlLocation="oramds:/apps/wsdl/abstractAuctionBids.wsdl">
     <interface.wsdl interface="urn:abstractAuctionBids#wsdl.interface(Bids)"/>
@@ -63,6 +65,17 @@
                 type="xs:string" many="false">WSDLDriven</property>
     </binding.ws>
   </reference>
+  <reference name="StoreBid" ui:wsdlLocation="StoreBid.wsdl">
+    <interface.wsdl interface="http://xmlns.oracle.com/pcbpel/adapter/db/Marqtplaats/AuctionBidService/StoreBid#wsdl.interface(StoreBid_ptt)"/>
+    <binding.jca config="StoreBid_db.jca"/>
+    <property name="jca.retry.count" type="xs:int" many="false" override="may">4</property>
+    <property name="jca.retry.interval" type="xs:int" many="false"
+              override="may">1</property>
+    <property name="jca.retry.backoff" type="xs:int" many="false"
+              override="may">2</property>
+    <property name="jca.retry.maxInterval" type="xs:string" many="false"
+              override="may">120</property>
+  </reference>
   <wire>
     <source.uri>medAuctionBids_ep</source.uri>
     <target.uri>medAuctionBids/medAuctionBids</target.uri>
@@ -82,5 +95,9 @@
   <wire>
     <source.uri>AuctionBidBPEL/AuctionDetailsService</source.uri>
     <target.uri>AuctionDetailsService</target.uri>
+  </wire>
+  <wire>
+    <source.uri>medAuctionBids/StoreBid</source.uri>
+    <target.uri>StoreBid</target.uri>
   </wire>
 </composite>

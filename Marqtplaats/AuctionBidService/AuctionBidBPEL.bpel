@@ -17,7 +17,17 @@
                xmlns:ns1="urn:abstractAuctionBids"
                xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable"
          xmlns:ns2="http://xmlns.qualogy.com/marQtplaats"
-         xmlns:ns3="urn:abstractAuction">
+         xmlns:ns3="urn:abstractAuction"
+         xmlns:xp20="http://www.oracle.com/XSL/Transform/java/oracle.tip.pc.services.functions.Xpath20"
+         xmlns:bpws="http://schemas.xmlsoap.org/ws/2003/03/business-process/"
+         xmlns:oraext="http://www.oracle.com/XSL/Transform/java/oracle.tip.pc.services.functions.ExtFunc"
+         xmlns:dvm="http://www.oracle.com/XSL/Transform/java/oracle.tip.dvm.LookupValue"
+         xmlns:hwf="http://xmlns.oracle.com/bpel/workflow/xpath"
+         xmlns:ids="http://xmlns.oracle.com/bpel/services/IdentityService/xpath"
+         xmlns:bpm="http://xmlns.oracle.com/bpmn20/extensions"
+         xmlns:xdk="http://schemas.oracle.com/bpel/extension/xpath/function/xdk"
+         xmlns:xref="http://www.oracle.com/XSL/Transform/java/oracle.tip.xref.xpath.XRefXPathFunctions"
+         xmlns:ldap="http://schemas.oracle.com/xpath/extension/ldap">
 
   <!-- 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -56,6 +66,8 @@
               messageType="ns1:AuctionHighestBidResponseMessage"/>
     <variable name="AuctionDetails"
               messageType="ns3:AuctionDetailsResponseMessage"/>
+    <variable name="AuctionBidErrorMessage"
+              messageType="ns1:AuctionBidErrorMessage"/>
   </variables>
 
   <!-- 
@@ -69,7 +81,7 @@
 
     <!-- Receive input from requestor. (Note: This maps to operation defined in AuctionBidBPEL.wsdl) -->
     <receive name="receiveInput" partnerLink="auctionbidbpel_client" portType="ns1:DoBid" operation="doBidOnAuction" variable="inputVariable" createInstance="yes"/>
-    <flow name="Flow1">
+    <flow name="ObtainData">
       <sequence name="Sequence">
         <scope name="currentHighestBid" exitOnStandardFault="no">
           <variables>
@@ -112,6 +124,120 @@
         </scope>
       </sequence>
     </flow>
+    <if name="ValidateBuyer">
+      <documentation>ValidationOK</documentation>
+      <condition>$inputVariable.in/ns2:Buyer  !=  $AuctionDetails.payload/ns2:Auction/ns2:Seller</condition>
+      <empty name="continue"/>
+      <else>
+        <documentation>ValidationFails</documentation>
+        <sequence name="terminationSequenceWithFaultReply">
+          <assign name="assignErrorMessage">
+            <copy>
+              <from>'Cheater ! As a seller you are *not* allowed to place bids on your own auctions !'</from>
+              <to>$AuctionBidErrorMessage.oops</to>
+            </copy>
+          </assign>
+          <reply name="replyInvalidBuyer" faultName="ns1:GeneralBidFault"
+                 partnerLink="auctionbidbpel_client" portType="ns1:DoBid"
+                 operation="doBidOnAuction" variable="AuctionBidErrorMessage"/>
+          <exit name="Aftaaien"/>
+        </sequence>
+      </else>
+    </if><if name="BidHigherThanStartingPrice"
+             xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable">
+      <documentation>Controleer dat het bod geldig is.</documentation>
+      <condition>((count($AuctionDetails.payload/ns2:Auction/ns2:StartingPrice) = 0) or ($inputVariable.in/ns2:PriceBid &gt;=$AuctionDetails.payload/ns2:Auction/ns2:StartingPrice) )</condition>
+      <empty name="continue"/>
+      <else>
+         <documentation>ValidationFails</documentation>
+         <sequence name="terminationSequenceWithFaultReply">
+            <assign name="assignErrorMessage">
+            <copy>
+              <from>'The bid is too low with respect to the starting price.'</from>
+              <to>$AuctionBidErrorMessage.oops</to>
+            </copy>
+          </assign>
+            <reply name="replyInvalidBuyer" faultName="ns1:BidTooLowFault"
+                   partnerLink="auctionbidbpel_client" portType="ns1:DoBid"
+                   operation="doBidOnAuction"
+                   variable="AuctionBidErrorMessage"/>
+            <exit name="Aftaaien"/>
+         </sequence>
+      </else>
+   </if><if name="BidHigherThanCurrentHighest"
+            xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable">
+      <documentation>Bod moet hoger zijn dan huidig maximum</documentation>
+      <condition>((count($currentHighestBid.return/ns2:Bid) = 0) or ($inputVariable.in/ns2:PriceBid &gt;= $currentHighestBid.return/ns2:Bid))</condition>
+      <empty name="continue"/>
+      <else>
+         <documentation>ValidationFails</documentation>
+         <sequence name="terminationSequenceWithFaultReply">
+            <assign name="assignErrorMessage">
+               
+            <copy>
+                  <from>'The bid is too low with respect to the current highest bid.'</from>
+                  <to>$AuctionBidErrorMessage.oops</to>
+               </copy></assign>
+            <reply name="replyInvalidBuyer" faultName="ns1:BidTooLowFault"
+                   partnerLink="auctionbidbpel_client" portType="ns1:DoBid"
+                   operation="doBidOnAuction"
+                   variable="AuctionBidErrorMessage"/>
+            <exit name="Aftaaien"/>
+         </sequence>
+      </else>
+   </if><if name="BidSatisfiesIncrement"
+            xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable">
+      <documentation>Bod moet hoger zijn dan huidig maximum</documentation>
+      <condition>((count($currentHighestBid.return/ns2:Bid) = 0) and (count($AuctionDetails.payload/ns2:Auction/ns2:StartingPrice) = 0)) or (count($AuctionDetails.payload/ns2:Auction/ns2:MinimumIncrement) = 0 ) or($inputVariable.in/ns2:PriceBid &gt;= ($currentHighestBid.return/ns2:Bid + $AuctionDetails.payload/ns2:Auction/ns2:MinimumIncrement)) or($inputVariable.in/ns2:PriceBid &gt;= ($AuctionDetails.payload/ns2:Auction/ns2:StartingPrice + $AuctionDetails.payload/ns2:Auction/ns2:MinimumIncrement))</condition>
+      <empty name="continue"/>
+      <else>
+         <documentation>ValidationFails</documentation>
+         <sequence name="terminationSequenceWithFaultReply">
+            <assign name="assignErrorMessage">
+               
+            <copy>
+                  <from>'The bid is too low with respect to the current highest bid.'</from>
+                  <to>$AuctionBidErrorMessage.oops</to>
+               </copy></assign>
+            <reply name="replyInvalidBuyer" faultName="ns1:BidTooLowFault"
+                   partnerLink="auctionbidbpel_client" portType="ns1:DoBid"
+                   operation="doBidOnAuction"
+                   variable="AuctionBidErrorMessage"/>
+            <exit name="Aftaaien"/>
+         </sequence>
+      </else>
+   </if>
+    <scope name="BidOK" exitOnStandardFault="no">
+      <variables>
+        <variable name="storeBid" messageType="ns1:AuctionBidRequestMessage"/>
+      </variables>
+      <sequence name="Sequence3">
+        <assign name="assignBidToBeStored">
+          <copy>
+            <from>$inputVariable.in/ns2:AuctionID</from>
+            <to>$storeBid.in/ns2:AuctionID</to>
+          </copy>
+          <copy>
+            <from>$inputVariable.in/ns2:Buyer</from>
+            <to>$storeBid.in/ns2:Buyer</to>
+          </copy>
+          <copy>
+            <from>$inputVariable.in/ns2:PriceBid</from>
+            <to>$storeBid.in/ns2:PriceBid</to>
+          </copy>
+        </assign>
+        <invoke name="invokeStoreBid"
+                partnerLink="medAuctionBids.medAuctionBids" portType="ns1:Bids"
+                operation="storeBid" inputVariable="storeBid"
+                bpelx:invokeAsDetail="no"/>
+      </sequence>
+    </scope>
+    <assign name="assignStatus">
+      <copy>
+        <from>'OK, dude !'</from>
+        <to>$outputVariable.return</to>
+      </copy>
+    </assign>
     <!-- Generate reply to synchronous request -->
     <reply name="replyOutput" partnerLink="auctionbidbpel_client" portType="ns1:DoBid" operation="doBidOnAuction" variable="outputVariable"/>
   </sequence>

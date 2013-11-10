@@ -33,6 +33,9 @@
       <input message="tns:AuctionHighestBidRequestMessage"/>
       <output message="tns:AuctionHighestBidResponseMessage"/>
     </operation>
+    <operation name="storeBid">
+      <input message="tns:AuctionBidRequestMessage"/>
+    </operation>
   </portType>
   <portType name="DoBid">
     <operation name="doBidOnAuction">

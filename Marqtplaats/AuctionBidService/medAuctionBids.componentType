@@ -12,4 +12,7 @@
              ui:wsdlLocation="AuctionBidDBService.wsdl">
     <interface.wsdl interface="http://xmlns.oracle.com/pcbpel/adapter/db/Marqtplaats/AuctionBidService/AuctionBidDBService#wsdl.interface(AuctionBidDBService_ptt)"/>
   </reference>
+  <reference name="StoreBid" ui:wsdlLocation="StoreBid.wsdl">
+    <interface.wsdl interface="http://xmlns.oracle.com/pcbpel/adapter/db/Marqtplaats/AuctionBidService/StoreBid#wsdl.interface(StoreBid_ptt)"/>
+  </reference>
 </componentType>

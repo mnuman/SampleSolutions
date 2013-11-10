@@ -1,0 +1,21 @@
+<?binding.jca StoreBid_db.jca?>
+<wsdl:definitions name="StoreBid" targetNamespace="http://xmlns.oracle.com/pcbpel/adapter/db/Marqtplaats/AuctionBidService/StoreBid" xmlns:tns="http://xmlns.oracle.com/pcbpel/adapter/db/Marqtplaats/AuctionBidService/StoreBid" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:plt="http://schemas.xmlsoap.org/ws/2003/05/partner-link/" xmlns:top="http://xmlns.oracle.com/pcbpel/adapter/db/top/StoreBid">
+    <plt:partnerLinkType name="StoreBid_plt">
+        <plt:role name="StoreBid_role">
+            <plt:portType name="tns:StoreBid_ptt"/>
+        </plt:role>
+    </plt:partnerLinkType>
+    <wsdl:types>
+        <schema xmlns="http://www.w3.org/2001/XMLSchema">
+            <import namespace="http://xmlns.oracle.com/pcbpel/adapter/db/top/StoreBid" schemaLocation="xsd/StoreBid_table.xsd"/>
+        </schema>
+    </wsdl:types>
+    <wsdl:message name="AuctionBidsCollection_msg">
+        <wsdl:part name="AuctionBidsCollection" element="top:AuctionBidsCollection"/>
+    </wsdl:message>
+    <wsdl:portType name="StoreBid_ptt">
+        <wsdl:operation name="insert">
+            <wsdl:input message="tns:AuctionBidsCollection_msg"/>
+        </wsdl:operation>
+    </wsdl:portType>
+</wsdl:definitions>
