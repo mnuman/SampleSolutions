@@ -14,4 +14,26 @@
          </case>
       </switch>
    </operation>
+   <operation name="ListAuctions" deliveryPolicy="AllOrNothing" priority="4"
+              validateSchema="false">
+      <switch>
+         <case executionType="direct" name="ListAuctions.ListAuctionsSelect">
+            <action>
+               <transform>
+                  <part name="$out.ListAuctionsSelect_inputParameters"
+                        function="xslt(xsl/listAuctionRequests.xsl, $in.payload)"/>
+               </transform>
+               <invoke reference="ListAuctions" operation="ListAuctionsSelect">
+                  <onReply>
+                     <transform>
+                        <part name="$out.payload"
+                              function="xslt(xsl/listAuctionTransformer.xsl, $in.AuctionCollection)"/>
+                     </transform>
+                     <reply/>
+                  </onReply>
+               </invoke>
+            </action>
+         </case>
+      </switch>
+   </operation>
 </Mediator>

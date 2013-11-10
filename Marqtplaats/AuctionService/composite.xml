@@ -14,6 +14,8 @@
           location="oramds:/apps/wsdl/abstractAuction.wsdl" importType="wsdl"/>
   <import namespace="http://xmlns.oracle.com/pcbpel/adapter/db/Marqtplaats/AuctionService/AuctionService"
           location="AuctionService.wsdl" importType="wsdl"/>
+  <import namespace="http://xmlns.oracle.com/pcbpel/adapter/db/Marqtplaats/AuctionService/ListAuctions"
+          location="ListAuctions.wsdl" importType="wsdl"/>
   <service name="medAuctions_2"
            ui:wsdlLocation="oramds:/apps/wsdl/abstractAuction.wsdl">
     <interface.wsdl interface="urn:abstractAuction#wsdl.interface(Auctions)"/>
@@ -33,6 +35,17 @@
     <property name="jca.retry.maxInterval" type="xs:string" many="false"
               override="may">120</property>
   </reference>
+  <reference name="ListAuctions" ui:wsdlLocation="ListAuctions.wsdl">
+    <interface.wsdl interface="http://xmlns.oracle.com/pcbpel/adapter/db/Marqtplaats/AuctionService/ListAuctions#wsdl.interface(ListAuctions_ptt)"/>
+    <binding.jca config="ListAuctions_db.jca"/>
+    <property name="jca.retry.count" type="xs:int" many="false" override="may">4</property>
+    <property name="jca.retry.interval" type="xs:int" many="false"
+              override="may">1</property>
+    <property name="jca.retry.backoff" type="xs:int" many="false"
+              override="may">2</property>
+    <property name="jca.retry.maxInterval" type="xs:string" many="false"
+              override="may">120</property>
+  </reference>
   <wire>
     <source.uri>medAuctions/AuctionService</source.uri>
     <target.uri>AuctionService</target.uri>
@@ -40,5 +53,9 @@
   <wire>
     <source.uri>medAuctions_2</source.uri>
     <target.uri>medAuctions/medAuctions</target.uri>
+  </wire>
+  <wire>
+    <source.uri>medAuctions/ListAuctions</source.uri>
+    <target.uri>ListAuctions</target.uri>
   </wire>
 </composite>

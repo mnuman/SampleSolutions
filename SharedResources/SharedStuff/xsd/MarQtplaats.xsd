@@ -102,10 +102,28 @@
       <xsd:element name="AuctionStatus" type="mqt:AuctionStatusType"
                    default="NOT_STARTED" maxOccurs="1" minOccurs="1"/>
       <xsd:element name="StartDate" type="xsd:date"/>
-      <xsd:element name="EndDate" maxOccurs="1" minOccurs="0"/>
+      <xsd:element name="EndDate" maxOccurs="1" minOccurs="0" type="xsd:date"/>
       <xsd:element name="Seller" type="mqt:NickNameType"/>
     </xsd:sequence>
   </xsd:complexType>
   <xsd:element name="AuctionRegistrationRequest"
                type="mqt:AuctionRegistrationRequestType"/>
+  <xsd:complexType name="AuctionType">
+    <xsd:complexContent>
+      <xsd:extension base="mqt:AuctionRegistrationRequestType">
+        <xsd:sequence>
+          <xsd:element name="ID" type="xsd:integer"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="Auctions">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="Auction" type="mqt:AuctionType"
+                     maxOccurs="unbounded" minOccurs="0"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="ListAuctionsRequestDate" type="xsd:date"/>
 </xsd:schema>

@@ -9,16 +9,26 @@
              xmlns:xqcm="http://xmlns.qualogy.com/marQtplaats">
   <types>
     <xsd:schema>
-      <xsd:import schemaLocation="../xsd/MarQtplaats.xsd"
+      <xsd:import schemaLocation="oramds:/apps/xsd/MarQtplaats.xsd"
                   namespace="http://xmlns.qualogy.com/marQtplaats"/>
     </xsd:schema>
   </types>
   <message name="AuctionRegistrationRequestMessage">
     <part name="payload" element="xqcm:AuctionRegistrationRequest"/>
   </message>
+  <message name="AuctionsResponseMessage">
+    <part name="payload" element="xqcm:Auctions"/>
+  </message>
+  <message name="AuctionsRequestMessage">
+    <part name="payload" element="xqcm:ListAuctionsRequestDate"/>
+  </message>
   <portType name="Auctions">
     <operation name="RegisterAuction">
       <input message="tns:AuctionRegistrationRequestMessage"/>
+    </operation>
+    <operation name="ListAuctions">
+      <input message="tns:AuctionsRequestMessage"/>
+      <output message="tns:AuctionsResponseMessage"/>
     </operation>
   </portType>
 </definitions>

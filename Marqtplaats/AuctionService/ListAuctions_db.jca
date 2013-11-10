@@ -1,0 +1,14 @@
+<adapter-config name="ListAuctions" adapter="Database Adapter" wsdlLocation="ListAuctions.wsdl" xmlns="http://platform.integration.oracle/blocks/adapter/fw/metadata">
+  
+  <connection-factory location="eis/DB/MarQtplaats" UIConnectionName="MarQtplaats" adapterRef=""/>
+  <endpoint-interaction portType="ListAuctions_ptt" operation="ListAuctionsSelect">
+    <interaction-spec className="oracle.tip.adapter.db.DBReadInteractionSpec">
+      <property name="DescriptorName" value="ListAuctions.Auction"/>
+      <property name="QueryName" value="ListAuctionsSelect"/>
+      <property name="MappingsMetaDataURL" value="ListAuctions-or-mappings.xml"/>
+      <property name="ReturnSingleResultSet" value="false"/>
+      <property name="GetActiveUnitOfWork" value="false"/>
+    </interaction-spec>
+  </endpoint-interaction>
+
+</adapter-config>
