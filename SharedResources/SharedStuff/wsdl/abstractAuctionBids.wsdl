@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<definitions targetNamespace="urn:abstractAuctionBids"
+             xmlns="http://schemas.xmlsoap.org/wsdl/"
+             xmlns:tns="urn:abstractAuctionBids"
+             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+             xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+             xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+             xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+             xmlns:xqcm="http://xmlns.qualogy.com/marQtplaats">
+  <types>
+    <xsd:schema>
+      <xsd:import schemaLocation="oramds:/apps/xsd/MarQtplaats.xsd"
+                  namespace="http://xmlns.qualogy.com/marQtplaats"/>
+    </xsd:schema>
+  </types>
+  <message name="AuctionBidRequestMessage">
+    <part name="in" element="xqcm:AuctionBid"/>
+  </message>
+  <message name="AuctionBidResponseMessage">
+    <part name="return" element="xqcm:AuctionBidResponse"/>
+  </message>
+  <message name="AuctionBidErrorMessage">
+    <part name="oops" element="xqcm:AuctionBidError"/>
+  </message>
+  <message name="AuctionHighestBidRequestMessage">
+    <part name="in" element="xqcm:AuctionID"/>
+  </message>
+  <message name="AuctionHighestBidResponseMessage">
+    <part name="return" element="xqcm:CurrentHighestBid"/>
+  </message>
+  <portType name="Bids">
+    <operation name="getCurrentHighestBid">
+      <input message="tns:AuctionHighestBidRequestMessage"/>
+      <output message="tns:AuctionHighestBidResponseMessage"/>
+    </operation>
+  </portType>
+  <portType name="DoBid">
+    <operation name="doBidOnAuction">
+      <input message="tns:AuctionBidRequestMessage"/>
+      <output message="tns:AuctionBidResponseMessage"/>
+      <fault message="tns:AuctionBidErrorMessage" name="BidTooLowFault"/>
+      <fault message="tns:AuctionBidErrorMessage"
+             name="BidViolatesIncrementFault"/>
+      <fault message="tns:AuctionBidErrorMessage" name="GeneralBidFault"/>
+    </operation>
+  </portType>
+</definitions>

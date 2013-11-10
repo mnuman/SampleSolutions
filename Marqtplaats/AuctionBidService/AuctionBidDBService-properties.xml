@@ -1,0 +1,29 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+   <entry key="AUCTION_BIDS:db_column_2">BUYER</entry>
+   <entry key="AUCTION_BIDS:db_column_1">ID_AUCTION</entry>
+   <entry key="AUCTION_BIDS:db_column_0">ID</entry>
+   <entry key="AUCTION_BIDS.BUYER:db_column_not_null">true</entry>
+   <entry key="AUCTION_BIDS.ID:db_column_precision">22</entry>
+   <entry key="AUCTION_BIDS.BUYER:db_column_type">VARCHAR2</entry>
+   <entry key="AUCTION_BIDS.PRICE:db_column_not_null">true</entry>
+   <entry key="AUCTION_BIDS.PRICE:db_column_scale">2</entry>
+   <entry key="AUCTION_BIDS:db_table_type">TABLE</entry>
+   <entry key="AUCTION_BIDS.PRICE:db_column_precision">15</entry>
+   <entry key="return_single_result_set">false</entry>
+   <entry key="AUCTION_BIDS.ID_AUCTION:db_column_scale">0</entry>
+   <entry key="AUCTION_BIDS.ID_AUCTION:db_column_type">NUMBER</entry>
+   <entry key="AUCTION_BIDS.BUYER:db_column_size">30</entry>
+   <entry key="AUCTION_BIDS.ID:db_column_type">NUMBER</entry>
+   <entry key="AUCTION_BIDS.ID_AUCTION:db_column_precision">22</entry>
+   <entry key="AUCTION_BIDS.ID_AUCTION:db_column_not_null">true</entry>
+   <entry key="AUCTION_BIDS.BID_TIMESTAMP:db_column_not_null">true</entry>
+   <entry key="AUCTION_BIDS.ID:db_column_scale">0</entry>
+   <entry key="root_descriptor_alias">AUCTION_BIDS</entry>
+   <entry key="AUCTION_BIDS.BID_TIMESTAMP:db_column_type">TIMESTAMP(6)</entry>
+   <entry key="AUCTION_BIDS.PRICE:db_column_type">NUMBER</entry>
+   <entry key="AUCTION_BIDS.ID:db_column_not_null">true</entry>
+   <entry key="AUCTION_BIDS:db_column_4">BID_TIMESTAMP</entry>
+   <entry key="AUCTION_BIDS:db_column_3">PRICE</entry>
+</properties>

@@ -1,0 +1,25 @@
+<?binding.jca AuctionBidDBService_db.jca?>
+<wsdl:definitions name="AuctionBidDBService" targetNamespace="http://xmlns.oracle.com/pcbpel/adapter/db/Marqtplaats/AuctionBidService/AuctionBidDBService" xmlns:tns="http://xmlns.oracle.com/pcbpel/adapter/db/Marqtplaats/AuctionBidService/AuctionBidDBService" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:plt="http://schemas.xmlsoap.org/ws/2003/05/partner-link/" xmlns:top="http://xmlns.oracle.com/pcbpel/adapter/db/top/AuctionBidDBService">
+    <plt:partnerLinkType name="AuctionBidDBService_plt">
+        <plt:role name="AuctionBidDBService_role">
+            <plt:portType name="tns:AuctionBidDBService_ptt"/>
+        </plt:role>
+    </plt:partnerLinkType>
+    <wsdl:types>
+        <schema xmlns="http://www.w3.org/2001/XMLSchema">
+            <import namespace="http://xmlns.oracle.com/pcbpel/adapter/db/top/AuctionBidDBService" schemaLocation="xsd/AuctionBidDBService_table.xsd"/>
+        </schema>
+    </wsdl:types>
+    <wsdl:message name="AuctionBidDBServiceSelect_inputParameters">
+        <wsdl:part name="AuctionBidDBServiceSelect_inputParameters" element="top:AuctionBidDBServiceSelect_auctionIDInputParameters"/>
+    </wsdl:message>
+    <wsdl:message name="AuctionBidsCollection_msg">
+        <wsdl:part name="AuctionBidsCollection" element="top:AuctionBidsCollection"/>
+    </wsdl:message>
+    <wsdl:portType name="AuctionBidDBService_ptt">
+        <wsdl:operation name="AuctionBidDBServiceSelect">
+            <wsdl:input message="tns:AuctionBidDBServiceSelect_inputParameters"/>
+            <wsdl:output message="tns:AuctionBidsCollection_msg"/>
+        </wsdl:operation>
+    </wsdl:portType>
+</wsdl:definitions>

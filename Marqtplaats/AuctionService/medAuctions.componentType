@@ -14,4 +14,8 @@
   <reference name="ListAuctions" ui:wsdlLocation="ListAuctions.wsdl">
     <interface.wsdl interface="http://xmlns.oracle.com/pcbpel/adapter/db/Marqtplaats/AuctionService/ListAuctions#wsdl.interface(ListAuctions_ptt)"/>
   </reference>
+  <reference name="AuctionDetailService"
+             ui:wsdlLocation="AuctionDetailService.wsdl">
+    <interface.wsdl interface="http://xmlns.oracle.com/pcbpel/adapter/db/Marqtplaats/AuctionService/AuctionDetailService#wsdl.interface(AuctionDetailService_ptt)"/>
+  </reference>
 </componentType>

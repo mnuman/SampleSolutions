@@ -125,5 +125,30 @@
       </xsd:sequence>
     </xsd:complexType>
   </xsd:element>
+  <xsd:element name="AuctionDetails">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="Auction" type="mqt:AuctionType"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="AuctionID" type="xsd:integer"/>
+  <xsd:element name="CurrentHighestBid" type="mqt:CurrentHighestBidType"/>
+  <xsd:complexType name="CurrentHighestBidType">
+    <xsd:sequence>
+      <xsd:element name="Bid" type="xsd:decimal" minOccurs="0"/>
+      <xsd:element name="BidderNickname" minOccurs="0" type="mqt:NickNameType"/>
+    </xsd:sequence>
+  </xsd:complexType>
   <xsd:element name="ListAuctionsRequestDate" type="xsd:date"/>
+  <xsd:complexType name="AuctionBidType">
+    <xsd:sequence>
+      <xsd:element name="AuctionID" type="xsd:integer"/>
+      <xsd:element name="Buyer" type="mqt:NickNameType"/>
+      <xsd:element name="PriceBid" type="xsd:decimal"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="AuctionBid" type="mqt:AuctionBidType"/>
+  <xsd:element name="AuctionBidResponse" type="xsd:string"/>
+  <xsd:element name="AuctionBidError" type="xsd:string"/>
 </xsd:schema>

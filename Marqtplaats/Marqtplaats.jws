@@ -13,6 +13,7 @@
       <value n="oracle.mds.internal.dt.ide.migrator.MDSConfigMigratorHelper" v="11.1.1.0.5313"/>
    </hash>
    <list n="listOfChildren">
+      <hash><url n="URL" path="AuctionBidService/AuctionBidService.jpr"/></hash>
       <hash><url n="URL" path="AuctionService/AuctionService.jpr"/></hash>
       <hash><url n="URL" path="ParticipantService/ParticipantService.jpr"/></hash>
    </list>

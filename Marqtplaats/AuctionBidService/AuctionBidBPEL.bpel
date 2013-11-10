@@ -1,0 +1,118 @@
+<?xml version = "1.0" encoding = "UTF-8" ?>
+<!--
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  Oracle JDeveloper BPEL Designer 
+  
+  Created: Sun Nov 10 13:59:38 CET 2013
+  Author:  mnuman
+  Purpose: Synchronous BPEL Process
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-->
+<process name="AuctionBidBPEL"
+               targetNamespace="http://xmlns.oracle.com/Marqtplaats/AuctionBidService/AuctionBidBPEL"
+               xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable"
+               xmlns:client="http://xmlns.oracle.com/Marqtplaats/AuctionBidService/AuctionBidBPEL"
+               xmlns:ora="http://schemas.oracle.com/xpath/extension"
+               xmlns:bpelx="http://schemas.oracle.com/bpel/extension"
+               xmlns:ns1="urn:abstractAuctionBids"
+               xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable"
+         xmlns:ns2="http://xmlns.qualogy.com/marQtplaats"
+         xmlns:ns3="urn:abstractAuction">
+
+  <!-- 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      PARTNERLINKS                                                      
+      List of services participating in this BPEL process               
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  --> 
+  <partnerLinks>
+    <!-- 
+      The 'client' role represents the requester of this service. It is 
+      used for callback. The location and correlation information associated
+      with the client role are automatically set using WS-Addressing.
+    -->
+    <partnerLink name="auctionbidbpel_client" partnerLinkType="ns1:AuctionBidBPEL" myRole="DoBid"/>
+    <partnerLink name="medAuctionBids.medAuctionBids"
+                 partnerLinkType="ns1:medAuctionBids.medAuctionBids"
+                 partnerRole="Bids"/>
+    <partnerLink name="AuctionDetailsService"
+                 partnerLinkType="ns3:AuctionDetailsService"
+                 partnerRole="Auctions"/>
+  </partnerLinks>
+
+  <!-- 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      VARIABLES                                                        
+      List of messages and XML documents used within this BPEL process 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  -->
+  <variables>
+    <!-- Reference to the message passed as input during initiation -->
+    <variable name="inputVariable" messageType="ns1:AuctionBidRequestMessage"/>
+
+    <!-- Reference to the message that will be returned to the requester-->
+    <variable name="outputVariable" messageType="ns1:AuctionBidResponseMessage"/>
+    <variable name="currentHighestBid"
+              messageType="ns1:AuctionHighestBidResponseMessage"/>
+    <variable name="AuctionDetails"
+              messageType="ns3:AuctionDetailsResponseMessage"/>
+  </variables>
+
+  <!-- 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     ORCHESTRATION LOGIC                                               
+     Set of activities coordinating the flow of messages across the    
+     services integrated within this business process                  
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  -->
+  <sequence name="main">
+
+    <!-- Receive input from requestor. (Note: This maps to operation defined in AuctionBidBPEL.wsdl) -->
+    <receive name="receiveInput" partnerLink="auctionbidbpel_client" portType="ns1:DoBid" operation="doBidOnAuction" variable="inputVariable" createInstance="yes"/>
+    <flow name="Flow1">
+      <sequence name="Sequence">
+        <scope name="currentHighestBid" exitOnStandardFault="no">
+          <variables>
+            <variable name="auctionId"
+                      messageType="ns1:AuctionHighestBidRequestMessage"/>
+          </variables>
+          <sequence name="seqCurrentHighestBid">
+            <assign name="assignAuctionId">
+              <copy>
+                <from>$inputVariable.in/ns2:AuctionID</from>
+                <to>$auctionId.in</to>
+              </copy>
+            </assign>
+            <invoke name="ivkCurrentHighestBid"
+                    partnerLink="medAuctionBids.medAuctionBids"
+                    portType="ns1:Bids" operation="getCurrentHighestBid"
+                    inputVariable="auctionId"
+                    outputVariable="currentHighestBid"
+                    bpelx:invokeAsDetail="no"/>
+          </sequence>
+        </scope>
+      </sequence>
+      <sequence name="Sequence2">
+        <scope name="AuctionDetails" exitOnStandardFault="no">
+          <variables>
+            <variable name="auctionId" messageType="ns3:AuctionRequestMessage"/>
+          </variables>
+          <sequence name="Sequence1">
+            <assign name="auctionID">
+              <copy>
+                <from>$inputVariable.in/ns2:AuctionID</from>
+                <to>$auctionId.payload</to>
+              </copy>
+            </assign>
+            <invoke name="ivkAuctionDetails" partnerLink="AuctionDetailsService"
+                    portType="ns3:Auctions" operation="GetDetails"
+                    inputVariable="auctionId"
+                    outputVariable="AuctionDetails" bpelx:invokeAsDetail="no"/>
+          </sequence>
+        </scope>
+      </sequence>
+    </flow>
+    <!-- Generate reply to synchronous request -->
+    <reply name="replyOutput" partnerLink="auctionbidbpel_client" portType="ns1:DoBid" operation="doBidOnAuction" variable="outputVariable"/>
+  </sequence>
+</process>

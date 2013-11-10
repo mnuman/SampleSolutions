@@ -22,6 +22,12 @@
   <message name="AuctionsRequestMessage">
     <part name="payload" element="xqcm:ListAuctionsRequestDate"/>
   </message>
+  <message name="AuctionRequestMessage">
+    <part name="payload" element="xqcm:AuctionID"/>
+  </message>
+  <message name="AuctionDetailsResponseMessage">
+    <part name="payload" element="xqcm:AuctionDetails"/>
+  </message>
   <portType name="Auctions">
     <operation name="RegisterAuction">
       <input message="tns:AuctionRegistrationRequestMessage"/>
@@ -29,6 +35,10 @@
     <operation name="ListAuctions">
       <input message="tns:AuctionsRequestMessage"/>
       <output message="tns:AuctionsResponseMessage"/>
+    </operation>
+    <operation name="GetDetails">
+      <input message="tns:AuctionRequestMessage"/>
+      <output message="tns:AuctionDetailsResponseMessage"/>
     </operation>
   </portType>
 </definitions>

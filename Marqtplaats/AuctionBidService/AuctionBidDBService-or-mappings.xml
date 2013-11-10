@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object-persistence xmlns="http://www.eclipse.org/eclipselink/xsds/persistence" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:eclipselink="http://www.eclipse.org/eclipselink/xsds/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="Eclipse Persistence Services - 2.3.1.v20111018-r10243">
+   <name>AuctionBidDBService-OR</name>
+   <class-mapping-descriptors>
+      <class-mapping-descriptor xsi:type="object-relational-class-mapping-descriptor">
+         <class>AuctionBidDBService.AuctionBids</class>
+         <alias>AUCTION_BIDS</alias>
+         <primary-key>
+            <field table="AUCTION_BIDS" name="ID" xsi:type="column"/>
+         </primary-key>
+         <events/>
+         <querying>
+            <queries>
+               <query name="AuctionBidDBServiceSelect" xsi:type="read-all-query">
+                  <arguments>
+                     <argument name="auctionID">
+                        <type>java.lang.String</type>
+                     </argument>
+                  </arguments>
+                  <call xsi:type="sql-call">
+                     <sql>SELECT ID, BUYER, PRICE FROM AUCTION_BIDS abi WHERE (abi.ID = #auctionID) AND
+( abi.price = ( select max(x.price) from auction_bids x where x.id = abi.id))</sql>
+                  </call>
+                  <reference-class>AuctionBidDBService.AuctionBids</reference-class>
+                  <container xsi:type="list-container-policy">
+                     <collection-type>java.util.Vector</collection-type>
+                  </container>
+               </query>
+            </queries>
+         </querying>
+         <attribute-mappings>
+            <attribute-mapping xsi:type="direct-mapping">
+               <attribute-name>id</attribute-name>
+               <field table="AUCTION_BIDS" name="ID" xsi:type="column"/>
+               <attribute-classification>java.math.BigDecimal</attribute-classification>
+            </attribute-mapping>
+            <attribute-mapping xsi:type="direct-mapping">
+               <attribute-name>idAuction</attribute-name>
+               <properties>
+                  <property name="enabled">
+                     <value>false</value>
+                  </property>
+               </properties>
+               <field table="AUCTION_BIDS" name="ID_AUCTION" xsi:type="column"/>
+               <attribute-classification>java.math.BigDecimal</attribute-classification>
+            </attribute-mapping>
+            <attribute-mapping xsi:type="direct-mapping">
+               <attribute-name>buyer</attribute-name>
+               <field table="AUCTION_BIDS" name="BUYER" xsi:type="column"/>
+               <attribute-classification>java.lang.String</attribute-classification>
+            </attribute-mapping>
+            <attribute-mapping xsi:type="direct-mapping">
+               <attribute-name>price</attribute-name>
+               <field table="AUCTION_BIDS" name="PRICE" xsi:type="column"/>
+               <attribute-classification>java.math.BigDecimal</attribute-classification>
+            </attribute-mapping>
+            <attribute-mapping xsi:type="direct-mapping">
+               <attribute-name>bidTimestamp</attribute-name>
+               <properties>
+                  <property name="enabled">
+                     <value>false</value>
+                  </property>
+               </properties>
+               <field table="AUCTION_BIDS" name="BID_TIMESTAMP" xsi:type="column"/>
+               <attribute-classification>java.sql.Timestamp</attribute-classification>
+            </attribute-mapping>
+         </attribute-mappings>
+         <descriptor-type>independent</descriptor-type>
+         <caching>
+            <cache-type>weak-reference</cache-type>
+            <cache-size>-1</cache-size>
+            <always-refresh>true</always-refresh>
+         </caching>
+         <remote-caching>
+            <cache-type>weak-reference</cache-type>
+            <cache-size>-1</cache-size>
+         </remote-caching>
+         <instantiation/>
+         <copying xsi:type="instantiation-copy-policy"/>
+         <tables>
+            <table name="AUCTION_BIDS"/>
+         </tables>
+         <structure>structureName</structure>
+      </class-mapping-descriptor>
+   </class-mapping-descriptors>
+   <login xsi:type="database-login">
+      <platform-class>org.eclipse.persistence.platform.database.oracle.Oracle9Platform</platform-class>
+      <connection-url></connection-url>
+   </login>
+</object-persistence>

@@ -36,4 +36,28 @@
          </case>
       </switch>
    </operation>
+   <operation name="GetDetails" deliveryPolicy="AllOrNothing" priority="4"
+              validateSchema="false">
+      <switch>
+         <case executionType="direct"
+               name="AuctionDetailService.selectByPrimaryKey">
+            <action>
+               <transform>
+                  <part name="$out.selectByPrimaryKey_inputParameters"
+                        function="xslt(xsl/AuctionID_To_AuctionPrimaryKey.xsl, $in.payload)"/>
+               </transform>
+               <invoke reference="AuctionDetailService"
+                       operation="selectByPrimaryKey">
+                  <onReply>
+                     <transform>
+                        <part name="$out.payload"
+                              function="xslt(xsl/auctionDetails.xsl, $in.AuctionCollection)"/>
+                     </transform>
+                     <reply/>
+                  </onReply>
+               </invoke>
+            </action>
+         </case>
+      </switch>
+   </operation>
 </Mediator>
