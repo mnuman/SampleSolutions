@@ -75,6 +75,8 @@
   <component name="BPELUpserter" version="2.0">
     <implementation.bpel src="BPELUpserter.bpel"/>
     <property name="bpel.config.transaction" type="xs:string" many="false">required</property>
+    <property name="configuration.monitorLocation" type="xs:string"
+              many="false">BPELUpserter.monitor</property>
   </component>
   <component name="SellerApproval">
     <implementation.workflow src="SellerApproval.task"/>

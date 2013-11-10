@@ -17,6 +17,7 @@
    <routingSlip xmlns="http://xmlns.oracle.com/bpel/workflow/routingSlip">
       <globalConfiguration>
          <applicationContext></applicationContext>
+         <taskOwner type="STATIC" identityType="user">oraclesystemuser</taskOwner>
          <sharePayloadConfiguration>
             <type>USE_SYSTEM_WIDE_GLOBAL_CONFIGURATION</type>
          </sharePayloadConfiguration>

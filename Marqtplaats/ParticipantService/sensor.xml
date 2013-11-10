@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sensors xmlns="http://xmlns.oracle.com/bpel/sensor">
+    <sensor sensorName="Nickname" kind="service" target="undefined" filter="" xmlns:ns1="http://xmlns.qualogy.com/marQtplaats">
+        <serviceConfig service="bpelupserter_client_ep" expression="$in.payload/ns1:Participant/ns1:NickName" operation="process" outputDataType="NickNameType" outputNamespace="http://xmlns.qualogy.com/marQtplaats"/>
+    </sensor>
+</sensors>
