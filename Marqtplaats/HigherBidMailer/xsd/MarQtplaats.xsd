@@ -156,7 +156,6 @@
       <xsd:element name="AuctionID"/>
       <xsd:element name="AuctionDescription"/>
       <xsd:element name="NewHighestBid"/>
-      <xsd:element name="NickName" type="mqt:NickNameType"/>
       <xsd:element name="OldHighestBid"/>
     </xsd:sequence>
   </xsd:complexType>

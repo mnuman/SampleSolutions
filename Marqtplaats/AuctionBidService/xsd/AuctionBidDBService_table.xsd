@@ -22,7 +22,7 @@
    <xs:element name="AuctionBidDBServiceSelect_auctionIDInputParameters" type="AuctionBidDBServiceSelect_auctionID"/>
    <xs:complexType name="AuctionBidDBServiceSelect_auctionID">
       <xs:sequence>
-         <xs:element name="auctionID" type="xs:decimal" minOccurs="1" maxOccurs="1"/>
+         <xs:element name="auctionID" type="xs:string" minOccurs="1" maxOccurs="1"/>
       </xs:sequence>
    </xs:complexType>
 </xs:schema>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<definitions targetNamespace="urn:abstractLookupParticipantEmail"
+             xmlns="http://schemas.xmlsoap.org/wsdl/"
+             xmlns:tns="urn:abstractLookupParticipantEmail"
+             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+             xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+             xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+             xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+             xmlns:xqcm="http://xmlns.qualogy.com/marQtplaats">
+  <types>
+    <xsd:schema>
+      <xsd:import schemaLocation="oramds:/apps/xsd/MarQtplaats.xsd"
+                  namespace="http://xmlns.qualogy.com/marQtplaats"/>
+    </xsd:schema>
+  </types>
+  <message name="LookupEmailAddresRequest">
+    <part name="payload" element="xqcm:NickName"/>
+  </message>  
+  <message name="LookupEmailAddresResponse">
+      <part name="payload" element="xqcm:EmailAddress"/>
+  </message>
+  <portType name="ParticipantEmailPort">
+
+    <operation name="lookupEmail">
+      <input message="tns:LookupEmailAddresRequest"/>
+      <output message="tns:LookupEmailAddresResponse"/>
+    </operation>
+  </portType>  
+</definitions>

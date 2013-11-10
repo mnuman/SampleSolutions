@@ -27,7 +27,8 @@
          xmlns:bpm="http://xmlns.oracle.com/bpmn20/extensions"
          xmlns:xdk="http://schemas.oracle.com/bpel/extension/xpath/function/xdk"
          xmlns:xref="http://www.oracle.com/XSL/Transform/java/oracle.tip.xref.xpath.XRefXPathFunctions"
-         xmlns:ldap="http://schemas.oracle.com/xpath/extension/ldap">
+         xmlns:ldap="http://schemas.oracle.com/xpath/extension/ldap"
+         xmlns:ns4="http://xmlns.qualogy.com/schemas/marQtplaats/bids">
 
   <!-- 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -68,6 +69,7 @@
               messageType="ns3:AuctionDetailsResponseMessage"/>
     <variable name="AuctionBidErrorMessage"
               messageType="ns1:AuctionBidErrorMessage"/>
+    <variable name="eventPayload" element="ns2:HigherBidReceived"/>
   </variables>
 
   <!-- 
@@ -238,6 +240,40 @@
         <to>$outputVariable.return</to>
       </copy>
     </assign>
+    <if name="IfHigherBid">
+      <documentation>HigherBidIsReceived</documentation>
+      <condition>count($currentHighestBid.return/ns2:Bid) &gt; 0</condition>
+      <sequence name="Sequence4">
+        <assign name="Assign1">
+          <copy>
+            <from>$inputVariable.in/ns2:AuctionID</from>
+            <to>$eventPayload/ns2:AuctionID</to>
+          </copy>
+          <copy>
+            <from>$inputVariable.in/ns2:PriceBid</from>
+            <to>$eventPayload/ns2:NewHighestBid</to>
+          </copy>
+          <copy>
+            <from>$AuctionDetails.payload/ns2:Auction/ns2:Description</from>
+            <to>$eventPayload/ns2:AuctionDescription</to>
+          </copy>
+          <copy>
+            <from>$currentHighestBid.return/ns2:Bid</from>
+            <to>$eventPayload/ns2:OldHighestBid</to>
+          </copy>
+          <copy>
+            <from>$currentHighestBid.return/ns2:BidderNickname</from>
+            <to>$eventPayload/ns2:NickName</to>
+          </copy>
+        </assign>
+        <invoke name="kickOffEvent"
+                bpelx:eventName="ns4:HigherBidEvent"
+                inputVariable="eventPayload" bpelx:invokeAsDetail="no"/>
+      </sequence>
+      <else>
+        <empty name="noActionRequired"/>
+      </else>
+    </if>
     <!-- Generate reply to synchronous request -->
     <reply name="replyOutput" partnerLink="auctionbidbpel_client" portType="ns1:DoBid" operation="doBidOnAuction" variable="outputVariable"/>
   </sequence>

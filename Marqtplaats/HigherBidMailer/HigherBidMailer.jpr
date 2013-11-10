@@ -59,18 +59,20 @@
       <string v="oracle.toplink.workbench.addin/toplinkContentSet"/>
       <string v="oracle.tip.tools.ide.fabric.addin.SCAContentSetProvider/sca-content"/>
    </list>
-   <value n="defaultPackage" v="sharedstuff"/>
+   <value n="defaultPackage" v="higherbidmailer"/>
+   <url n="HigherBidEmailerBPEL_bpelFileURL" path="HigherBidEmailerBPEL.bpel"/>
+   <value n="HigherBidEmailerBPEL_Namespace" v="http://xmlns.oracle.com/Marqtplaats/HigherBidMailer/HigherBidEmailerBPEL"/>
+   <value n="HigherBidEmailerBPEL_ProcessName" v="HigherBidEmailerBPEL"/>
+   <value n="HigherBidEmailerBPEL_Template" v="SUBSCRIBE_EVENTS"/>
+   <value n="HigherBidEmailerBPEL_wsdl" v="HigherBidEmailerBPEL.wsdl"/>
+   <value n="Namespace" v="http://xmlns.oracle.com/Marqtplaats/HigherBidMailer/HigherBidEmailerBPEL"/>
    <hash n="oracle.ide.model.ResourcePaths">
       <hash n="resourcesContentSet">
-         <list n="constituent-sets"/>
          <list n="url-path"/>
       </hash>
    </hash>
    <hash n="oracle.ide.model.TechnologyScopeConfiguration">
       <list n="technologyScope">
-         <string v="XML"/>
-         <string v="WebServices"/>
-         <string v="Java"/>
          <string v="SOA"/>
       </list>
    </hash>
@@ -96,8 +98,6 @@
          <string v=".xsd"/>
          <string v=".exm"/>
          <string v=".xml"/>
-         <string v=".exm"/>
-         <string v=".xml"/>
       </list>
       <value n="internalEncoding" v="Cp1252"/>
       <list n="Javac.commandline.optionlist">
@@ -114,136 +114,7 @@
    </hash>
    <hash n="oracle.jdeveloper.deploy.dt.DeploymentProfiles">
       <hash n="profileDefinitions">
-         <hash n="SharedResources">
-            <hash n="archiveOptions">
-               <value n="hasManifest" v="false"/>
-            </hash>
-            <hash n="fileGroups">
-               <list n="groups">
-                  <hash>
-                     <list n="contributors">
-                        <hash>
-                           <url n="location" path="."/>
-                           <value n="type" v="1"/>
-                        </hash>
-                     </list>
-                     <value n="displayName" v="Project Output"/>
-                     <hash n="filters">
-                        <list n="rules">
-                           <hash>
-                              <value n="pattern" v="composite.xml"/>
-                              <value n="type" v="1"/>
-                           </hash>
-                           <hash>
-                              <value n="pattern" v="testsuites/"/>
-                              <value n="type" v="1"/>
-                           </hash>
-                           <hash>
-                              <value n="pattern" v="SCA-INF/"/>
-                              <value n="type" v="1"/>
-                           </hash>
-                           <hash>
-                              <value n="pattern" v="deploy/"/>
-                              <value n="type" v="1"/>
-                           </hash>
-                           <hash>
-                              <value n="pattern" v="classes/"/>
-                              <value n="type" v="1"/>
-                           </hash>
-                           <hash>
-                              <value n="pattern" v="SharedStuff.jpr"/>
-                              <value n="type" v="1"/>
-                           </hash>
-                           <hash>
-                              <value n="pattern" v="WEB-INF/temp/**"/>
-                              <value n="type" v="1"/>
-                           </hash>
-                           <hash>
-                              <value n="pattern" v="WEB-INF/classes/jsp_servlet/**"/>
-                              <value n="type" v="1"/>
-                           </hash>
-                           <hash>
-                              <value n="pattern" v=".wlsjsps/"/>
-                              <value n="type" v="1"/>
-                           </hash>
-                           <hash>
-                              <value n="pattern" v=".wlLibs/"/>
-                              <value n="type" v="1"/>
-                           </hash>
-                           <hash>
-                              <value n="pattern" v="**/.svn/"/>
-                              <value n="type" v="1"/>
-                           </hash>
-                           <hash>
-                              <value n="pattern" v="**/CVS/"/>
-                              <value n="type" v="1"/>
-                           </hash>
-                           <hash>
-                              <value n="pattern" v="**/.ade_path"/>
-                              <value n="type" v="1"/>
-                           </hash>
-                           <hash>
-                              <value n="pattern" v="**/.data/**"/>
-                              <value n="type" v="1"/>
-                           </hash>
-                           <hash>
-                              <value n="pattern" v="**.cdi"/>
-                              <value n="type" v="1"/>
-                           </hash>
-                           <hash>
-                              <value n="pattern" v="**.contrib"/>
-                              <value n="type" v="1"/>
-                           </hash>
-                           <hash>
-                              <value n="pattern" v="**.keep"/>
-                              <value n="type" v="1"/>
-                           </hash>
-                           <hash>
-                              <value n="pattern" v="**.rvi"/>
-                              <value n="type" v="1"/>
-                           </hash>
-                           <hash>
-                              <value n="pattern" v=".jsps/"/>
-                              <value n="type" v="1"/>
-                           </hash>
-                           <hash>
-                              <value n="pattern" v=".tags/"/>
-                              <value n="type" v="1"/>
-                           </hash>
-                           <hash>
-                              <value n="pattern" v=".dtags/"/>
-                              <value n="type" v="1"/>
-                           </hash>
-                           <hash>
-                              <value n="pattern" v="**/*.jht"/>
-                              <value n="type" v="1"/>
-                           </hash>
-                           <hash>
-                              <value n="pattern" v="**/*.jjt"/>
-                              <value n="type" v="1"/>
-                           </hash>
-                           <hash>
-                              <value n="pattern" v="**/*.jxt"/>
-                              <value n="type" v="1"/>
-                           </hash>
-                           <hash>
-                              <value n="pattern" v="**"/>
-                           </hash>
-                        </list>
-                     </hash>
-                     <value n="internalName" v="project-output"/>
-                     <value n="type" v="1"/>
-                  </hash>
-               </list>
-            </hash>
-            <url n="jarURL" path="deploy/SharedResources.jar"/>
-            <hash n="libraryDependencies">
-               <value n="IncludeLibrariesFromOtherContainers" v="true"/>
-            </hash>
-            <value n="profileClass" v="oracle.jdeveloper.deploy.jar.ArchiveProfile"/>
-            <value n="profileName" v="SharedResources"/>
-         </hash>
-         <hash n="SharedStuff">
+         <hash n="HigherBidMailer">
             <hash n="archiveOptions">
                <value n="hasManifest" v="false"/>
             </hash>
@@ -385,44 +256,29 @@
                   </hash>
                </list>
             </hash>
-            <url n="jarURL" path="deploy/sca_SharedStuff${composite.revision_id}.jar"/>
+            <url n="jarURL" path="deploy/sca_HigherBidMailer${composite.revision_id}.jar"/>
             <hash n="libraryDependencies">
                <value n="IncludeLibrariesFromOtherContainers" v="true"/>
             </hash>
             <value n="profileClass" v="oracle.tip.tools.ide.fabric.deploy.sar.SarProfile"/>
-            <value n="profileName" v="SharedStuff"/>
+            <value n="profileName" v="HigherBidMailer"/>
          </hash>
       </hash>
       <list n="profileList">
-         <string v="SharedResources"/>
-         <string v="SharedStuff"/>
+         <string v="HigherBidMailer"/>
       </list>
    </hash>
    <hash n="oracle.jdeveloper.model.J2eeSettings">
-      <value n="j2eeWebAppName" v="SharedResources-SharedStuff-webapp"/>
-      <value n="j2eeWebContextRoot" v="SharedResources-SharedStuff-context-root"/>
+      <value n="j2eeWebAppName" v="Marqtplaats-HigherBidMailer-webapp"/>
+      <value n="j2eeWebContextRoot" v="Marqtplaats-HigherBidMailer-context-root"/>
    </hash>
    <hash n="oracle.jdeveloper.model.PathsConfiguration">
       <hash n="javaContentSet">
-         <list n="constituent-sets">
-            <hash>
-               <list n="pattern-filters">
-                  <string v="+**"/>
-               </list>
-               <list n="url-path">
-                  <url path="src/"/>
-               </list>
-            </hash>
-            <hash>
-               <list n="pattern-filters">
-                  <string v="+**"/>
-               </list>
-               <list n="url-path">
-                  <url path="SCA-INF/src/"/>
-               </list>
-            </hash>
+         <list n="pattern-filters">
+            <string v="+**"/>
          </list>
          <list n="url-path">
+            <url path="src/"/>
             <url path="SCA-INF/src/"/>
          </list>
       </hash>
@@ -502,4 +358,6 @@
          </list>
       </hash>
    </hash>
+   <value n="ProcessName" v="HigherBidEmailerBPEL"/>
+   <value n="Template" v="SUBSCRIBE_EVENTS"/>
 </jpr:project>

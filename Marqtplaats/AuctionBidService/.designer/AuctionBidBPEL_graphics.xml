@@ -4,11 +4,11 @@
    <annotationfile/>
    <iconize/>
    <partnerlink_locations>
-      <partnerlink name="auctionbidbpel_client" x="0" y="163" side="left"/>
-      <partnerlink name="medAuctionBids.medAuctionBids" x="1197" y="328" side="right"/>
-      <partnerlink name="AuctionDetailsService" x="1197" y="18" side="right"/>
+      <partnerlink name="auctionbidbpel_client" x="0" y="1294" side="left"/>
+      <partnerlink name="medAuctionBids.medAuctionBids" x="620" y="1136" side="right"/>
+      <partnerlink name="AuctionDetailsService" x="620" y="18" side="right"/>
    </partnerlink_locations>
-   <graph_layout viewport="0,414,1329,537" show_swimlanes="true">
+   <graph_layout viewport="0,2495,607,335" show_swimlanes="true">
       <layout_item collapsed="false" xpath="/process" type="process" showhandlers="true"/>
       <layout_item collapsed="false" xpath="/process/sequence" type="sequence"/>
       <layout_item collapsed="true" xpath="/process/sequence/flow" type="flow"/>
@@ -24,6 +24,7 @@
       <layout_item collapsed="false" xpath="/process/sequence/if[4]/else/sequence" type="sequence"/>
       <layout_item collapsed="false" xpath="/process/sequence/scope" type="scope" showhandlers="true"/>
       <layout_item collapsed="false" xpath="/process/sequence/scope/sequence" type="sequence"/>
+      <layout_item collapsed="false" xpath="/process/sequence/if[5]/sequence" type="sequence"/>
    </graph_layout>
    <bookmarks/>
 </graphics>

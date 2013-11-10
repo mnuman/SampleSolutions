@@ -38,6 +38,9 @@
   <import namespace="http://xmlns.oracle.com/bpel/workflow/taskService"
           location="oramds:/soa/shared/workflow/TaskServiceInterface.wsdl"
           importType="wsdl"/>
+  <import namespace="urn:abstractLookupParticipantEmail"
+          location="oramds:/apps/wsdl/abstractLookupParticipantEmail.wsdl"
+          importType="wsdl"/>
   <service name="medEmailValidator_ep" ui:wsdlLocation="ValidateEmailBPEL.wsdl">
     <interface.wsdl interface="http://xmlns.oracle.com/Marqtplaats/ParticipantService/ValidateEmailBPEL#wsdl.interface(ValidateEmailBPEL)"/>
     <binding.ws port="http://xmlns.oracle.com/Marqtplaats/ParticipantService/ValidateEmailBPEL#wsdl.endpoint(medEmailValidator_ep/ValidateEmailBPEL_pt)"/>
@@ -53,6 +56,11 @@
   <service name="bpelupserter_client_ep" ui:wsdlLocation="BPELUpserter.wsdl">
     <interface.wsdl interface="http://xmlns.oracle.com/Marqtplaats/ParticipantService/BPELUpserter#wsdl.interface(BPELUpserter)"/>
     <binding.ws port="http://xmlns.oracle.com/Marqtplaats/ParticipantService/BPELUpserter#wsdl.endpoint(bpelupserter_client_ep/BPELUpserter_pt)"/>
+  </service>
+  <service name="medParticipantEmailLookup_2"
+           ui:wsdlLocation="oramds:/apps/wsdl/abstractLookupParticipantEmail.wsdl">
+    <interface.wsdl interface="urn:abstractLookupParticipantEmail#wsdl.interface(ParticipantEmailPort)"/>
+    <binding.ws port="urn:abstractLookupParticipantEmail#wsdl.endpoint(medParticipantEmailLookup/ParticipantEmailPort_pt)"/>
   </service>
   <component name="medParticipants">
     <implementation.mediator src="medParticipants.mplan"/>
@@ -80,6 +88,9 @@
   </component>
   <component name="SellerApproval">
     <implementation.workflow src="SellerApproval.task"/>
+  </component>
+  <component name="medParticipantEmailLookup">
+    <implementation.mediator src="medParticipantEmailLookup.mplan"/>
   </component>
   <reference name="participantUpsertService"
              ui:wsdlLocation="participantUpsertService.wsdl">
@@ -205,5 +216,13 @@
   <wire>
     <source.uri>ValidateEmailBPEL/SellerApproval.TaskService_1</source.uri>
     <target.uri>SellerApproval/TaskService</target.uri>
+  </wire>
+  <wire>
+    <source.uri>medParticipantEmailLookup_2</source.uri>
+    <target.uri>medParticipantEmailLookup/medParticipantEmailLookup</target.uri>
+  </wire>
+  <wire>
+    <source.uri>medParticipantEmailLookup/medParticipants.medParticipants</source.uri>
+    <target.uri>medParticipants/medParticipants</target.uri>
   </wire>
 </composite>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<definitions xmlns="http://schemas.oracle.com/events/edl"
+             targetNamespace="http://xmlns.qualogy.com/schemas/marQtplaats/bids">
+    <schema-import location="oramds:/apps/xsd/MarQtplaats.xsd"
+                   namespace="http://xmlns.qualogy.com/marQtplaats"/>
+    <event-definition name="HigherBidEvent">
+        <content xmlns:ns0="http://xmlns.qualogy.com/marQtplaats"
+                 element="ns0:HigherBidReceived"/>
+    </event-definition>
+</definitions>

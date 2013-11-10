@@ -18,8 +18,8 @@
                      </argument>
                   </arguments>
                   <call xsi:type="sql-call">
-                     <sql>SELECT ID, BUYER, PRICE FROM AUCTION_BIDS abi WHERE (abi.ID = #auctionID) AND
-( abi.price = ( select max(x.price) from auction_bids x where x.id = abi.id))</sql>
+                     <sql>SELECT ID, BUYER, PRICE FROM AUCTION_BIDS abi WHERE (abi.id_Auction = #auctionID) AND
+( abi.price = ( select max(x.price) from auction_bids x where x.id_Auction = abi.id_Auction))</sql>
                   </call>
                   <reference-class>AuctionBidDBService.AuctionBids</reference-class>
                   <container xsi:type="list-container-policy">
